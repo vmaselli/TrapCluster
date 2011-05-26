@@ -1,0 +1,43 @@
+This is the UniTrap project.
+
+To work properly you need to 
+
+1. setup the enviroment variable 
+'Unitrap' - should point to your Unitrap root directory
+'Blastdir' - should point to where your BLAST databases can be found (if you want to run Blast)
+
+Example for bash shell:
+Unitrap=$HOME/your_dir/UniTrap
+Blastdir=$HOME/your/path/for/blast/genome';
+
+2. add the modules directory of Unitrap to your PERL5 lib
+export Unitrap
+export PERL5LIB=$PERL5LIB:$Unitrap/modules
+Example for t- c- shell
+setenv Unitrap $HOME/your_dir/UniTrap
+setenv PERL5LIB ${PERL5LIB}:/$Unitrap/modules
+
+3. change unitrap_conf.sample.pl in unitrap_conf.pl
+
+#Requirements
+4. be sure that you have
+
+	EnsEMBL api - NOTE: currently tested with v58
+	BioPerl api - NOTE: use the Ensembl-compatible version, i.e. bioperl 1.2.3 : http://bioperl.org/DIST/old_releases/bioperl-1.2.3.tar.gz
+	Blast
+	Blat
+	Mysql Database
+	perl modules: DBD, DBI
+	IO::String
+## TO START ##
+
+#TEST
+
+
+#Mysql Setup
+	1. set the config file to access to the database
+	2. run the script: scripts/create_database.pl
+
+#IMPORT TRAP FROM THE BEGINNING
+run load_trap.pl
+

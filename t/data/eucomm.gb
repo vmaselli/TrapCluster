@@ -1,0 +1,69 @@
+LOCUS       FI535505                 580 bp    DNA     linear   GSS 30-MAR-2009
+DEFINITION  EUCE0027h10.q1k5SPK EUCOMM random gene traps Mus musculus genomic
+            clone EUCE0027h10.q1k5SPK, genomic survey sequence.
+ACCESSION   FI535505
+VERSION     FI535505.1  GI:225784813
+KEYWORDS    GSS.
+SOURCE      Mus musculus (house mouse)
+  ORGANISM  Mus musculus
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Euarchontoglires; Glires; Rodentia;
+            Sciurognathi; Muroidea; Muridae; Murinae; Mus; Mus.
+REFERENCE   1  (bases 1 to 580)
+  AUTHORS   European Conditional Mouse Mutagenesis Program.
+  TITLE     Genomic sequences for EUCOMM gene traps
+  JOURNAL   Unpublished (2009)
+COMMENT     Contact: European Conditional Mouse Mutagenesis Program (EUCOMM)
+            European Conditional Mouse Mutagenesis Program (EUCOMM)
+            www.eucomm.org
+            Email: eucomm.distributor@helmholtz-muenchen.de
+            Sequences ending '5SPK' are the five-prime splinkerette sequence
+            read. Sequences ending '3SPK' are the three-prime splinkerette
+            sequence read. Five-prime splinkerette: Direction of sequence read
+            is antisense to gene orienation. Three-prime splinkerette:
+            Direction of sequence read is the same sense as the gene
+            orienation.
+            low quality hit means < 50% alignment quality
+            medium quality hit means 50-79% alignment quality
+            high quality hit means >= 80% alignment quality
+            sequenceName EUCE0027h10.q1k5SPK
+            dnaIsolationMethod Splinkerette
+            sequencingMethod ABI
+            assembly NCBIM37
+            vectorSequence
+            http://www.sanger.ac.uk/htgt/static/gene_trap/vector_sequence.fasta
+            chromosome 2
+            trapStart 91544728
+            trapEnd 91545294
+            lowQualityHit ENSMUSG00000027244 (Harbi1)
+            mediumQualityHitENSMUSG00000027244 (Harbi1)
+            highQualityHit ENSMUSG00000027244 (Harbi1)
+            http://www.sanger.ac.uk/htgt/report/gene_trap_well_page?gene_trap_w
+            ell=EUCE0027h10
+            Class: Gene Trap.
+FEATURES             Location/Qualifiers
+     source          1..580
+                     /organism="Mus musculus"
+                     /mol_type="genomic DNA"
+                     /strain="129P2 (formerly 129/OlaHsd)"
+                     /db_xref="taxon:10090"
+                     /clone="EUCE0027h10.q1k5SPK"
+                     /sex="male"
+                     /cell_type="Embryonic Stem Cell"
+                     /cell_line="E14Tg2a"
+                     /clone_lib="EUCOMM random gene traps"
+                     /note="Random gene traps from the EUCOMM project with
+                     conditional retroviral gene trap vectors."
+ORIGIN      
+        1 gtccccagca ccacaaagac aaaacaaaat caagtatgac cctggctagg gtgcctagca
+       61 aacacattaa agttggtttt gttatgttca aaccttatca ccacataaaa gtaaaattta
+      121 ccatcttgcc cattttttta gtaaacagtt caatggtatc aaatataccc acaatatatt
+      181 accaccagga gcatccattc caaactgttt tcatcttaca aatctgaaac tgtgtagaca
+      241 ttaagccata atctccccat tccaaaactc ttccagcacc tggcaattac caagggccat
+      301 gactggctac tctaagtatc acagaatctt acagtattta tctactgtga ctagcttact
+      361 tcccttagca taatgtccta aagatgtgtt catatgccag catctacagt ccggaggcat
+      421 ctatacagtc cttgtttgat tctttgagac agttatctct tcaggtatgt gctctagttt
+      481 cctgtagctg tgctgtgaca nataccatga ccgaatgaat taatnatcat taggaatgag
+      541 cctggtgaca aataatttca gatcccacta gtgtcgacac
+//
+

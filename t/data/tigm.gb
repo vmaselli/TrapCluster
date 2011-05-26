@@ -1,0 +1,62 @@
+LOCUS       EF920361                 563 bp    DNA     linear   GSS 12-JUL-2007
+DEFINITION  Mus musculus C57BL/6N IST12479G7BBF1 gene trap embryonic stem cell
+            insertion site sequence tag (IST), genomic survey sequence.
+ACCESSION   EF920361
+VERSION     EF920361.1  GI:151796980
+KEYWORDS    GSS.
+SOURCE      Mus musculus (house mouse)
+  ORGANISM  Mus musculus
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Euarchontoglires; Glires; Rodentia;
+            Sciurognathi; Muroidea; Muridae; Murinae; Mus; Mus.
+REFERENCE   1  (bases 1 to 563)
+  AUTHORS   Hansen,G.M., Markesich,D., Zhu,Q., Richter,L.J., Abuin,A.,
+            Sands,A., Finnell,R.H. and Zambrowicz,B.P.
+  TITLE     Large-Scale Gene Trapping in C57BL/6N Mouse Embryonic Stem Cells
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 563)
+  AUTHORS   Finnell,R.H. and McLeod,M.P.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (26-JUN-2007) TIGM, 2121 W. Holcombe Blvd, Houston, TX
+            77030, USA
+COMMENT     Contact: Richard H. Finnell at Texas Institute for Genomic Medicine
+            (TIGM)  Phone: 713-677-7429  Fax: 713-677-7790  Email:
+            ncbigss@tigm.org  Website: www.tigm.org.
+FEATURES             Location/Qualifiers
+     source          1..563
+                     /organism="Mus musculus"
+                     /mol_type="genomic DNA"
+                     /strain="C57BL/6N"
+                     /db_xref="taxon:10090"
+                     /clone="IST12479G7BBF1"
+                     /sex="male"
+                     /cell_line="Lex3.13 ES transgenic cell line harboring
+                     insertion mutation"
+                     /cell_type="embryonic stem cell"
+                     /transgenic
+                     /note="strain origin confirmed on the basis of 110 genetic
+                     markers distributed across 19 autosomes and the X
+                     chromosome (Charles River Laboratories); sequence tags are
+                     derived from genomic sequence by inverse PCR (IPCR) and
+                     represent the gene-trap vector insertion site; sequence
+                     reads represent either the upstream (F) or downstream (R)
+                     vector-genomic junction, amplified from circularized
+                     genomic DNA"
+     source          1..30
+                     /organism="Gene trapping vector VICTR76"
+                     /mol_type="genomic DNA"
+                     /db_xref="taxon:447635"
+     LTR             <1..30
+ORIGIN      
+        1 gattgactac ccgtcagcgg gggtctttca ttggtttttg ttttnngaat tgtcttattg
+       61 ctgtgtagag gggagcaagt gaagaaactg tttttgtagt ggttcggtgc tgtccgagta
+      121 gaggtgggag gagagtcagg gtgggctttg agagaggtcg gtaggacttg gcggtggatc
+      181 tggagggtga cagtggttcc tgaggatttg cccaggtttc tgggtggagc cgctgagtga
+      241 atactggtac tgtacatggg ggtgggaacc ggagggagag gagaaaatgg ttcccaaccc
+      301 ccaccccttc acgtccacgc tacgccatcc ttcctctgcc caggttnacc cctctccaca
+      361 tgantgactt tatctttaca cagctccngg ccacctctca gtttcttctt tgtcnacatt
+      421 ccctccccac tttgatttgc acattaattt gaggttcnnt tgcctcnnnn actgttntnn
+      481 ntctggtcnn actcccttgc tcataacctt tgtganngtt gtcattaaaa ttcctttgnn
+      541 gantntctca gggttttgtc tct
+//
+
