@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-=head1 Bio::Unitrap::RetrieveTrap
+=head1 Bio::TrapCluster::RetrieveTrap
 
 =head2 Authors
 
@@ -20,10 +20,10 @@
              
 =head2 Usage
 	
-	my $retrieve = Bio::Unitrap::RetrieveTrap->new;
+	my $retrieve = Bio::TrapCluster::RetrieveTrap->new;
 	if ($retrieve->fromfile && $retrieve->todb){
 		my $traps = $retrieve->get_from_file();
-		Bio::Unitrap::LoadTrap->load_db($traps);
+		Bio::TrapCluster::LoadTrap->load_db($traps);
 	}
 	if ($retrieve->fromdb && $retrieve->todb){
 		print STDOUT "loading trap from db\n";
@@ -33,7 +33,7 @@
             
 =cut
 
-package Bio::Unitrap::RetrieveTrap;
+package Bio::TrapCluster::RetrieveTrap;
 
 use strict;
 use DBI;
@@ -41,13 +41,13 @@ use Carp;
 use Data::Dumper;
 use vars qw(@ISA);
 use Bio::DB::GenBank;
-use Bio::Unitrap::Utils::Argument qw(rearrange);
-use Bio::Unitrap::Utils::Exception qw(throw warning deprecate);
+use Bio::TrapCluster::Utils::Argument qw(rearrange);
+use Bio::TrapCluster::Utils::Exception qw(throw warning deprecate);
 @ISA = qw(Bio::Root::Root);
 
 #setting global variables
 
-require "$ENV{'Unitrap'}/unitrap_conf.pl";
+require "$ENV{'TrapCluster'}/trapcluster_conf.pl";
 
 my %conf =  %::conf;
 my $debug = $conf{'global'}{'debug'};
@@ -56,17 +56,17 @@ my $mysql_path =$conf{'default'}{'mysql_path'};
 my $tmpdir = $conf{'default'}{'tmp_dir'};
 my $base_keyword = $conf{'retrieve'}{'base_keyword'};
 my $swarm = $conf{'global'}{'swarm'};
-use Bio::Unitrap::Fetch;
+use Bio::TrapCluster::Fetch;
 use Bio::SeqIO;
-use Bio::Unitrap::Utils::File;
+use Bio::TrapCluster::Utils::File;
 
 
 =head2 new
 
   Arg [..]: Take a set of named argumnts from a config file
-  Example: my $retrieve = Bio::Unitrap::RetrieveTrap->new
+  Example: my $retrieve = Bio::TrapCluster::RetrieveTrap->new
   Description:
-  Returntype: Bio::Unitrap::
+  Returntype: Bio::TrapCluster::
   Exceptions: source (fromfile, fromdb, fromquery) not defined;
   Caller:
   Status: 
@@ -138,9 +138,9 @@ sub new{
   $self->todb($todb) if defined $todb;
   $self->tofasta($tofasta) if defined $tofasta;
   $self->togff($togff) if defined $togff;
-  my $fetch = Bio::Unitrap::Fetch->new;
+  my $fetch = Bio::TrapCluster::Fetch->new;
   $self->fetch($fetch);
-  my $utilityfile = Bio::Unitrap::Utils::File->new;
+  my $utilityfile = Bio::TrapCluster::Utils::File->new;
   $self->utilityfile($utilityfile);
   return $self;
 }
@@ -400,7 +400,7 @@ sub get_from_db{
 	$port = $self->fetch->port unless defined $port;
 	$passwd = $self->fetch->pass unless defined $passwd;
 	my @traps;
-	my $db = Bio::Unitrap::self->fetch->new(-dbname=>$dbname);
+	my $db = Bio::TrapCluster::self->fetch->new(-dbname=>$dbname);
 	my $query = $conf{'retrieve'}{'query'};
 	if ($self->swarm){
 		my $last_trap = $db->select_from_table($conf{'retrieve'}{'last_id'});

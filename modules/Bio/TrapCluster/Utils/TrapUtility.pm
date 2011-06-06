@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-=head1 Bio::Unitrap::Utils::TrapUtility
+=head1 Bio::TrapCluster::Utils::TrapUtility
 
 =head2 Authors
 
@@ -15,13 +15,13 @@
              
 =head2 Usage
 
-	    my $obj = Bio::Unitrap::Utils::TrapUtility->new;
+	    my $obj = Bio::TrapCluster::Utils::TrapUtility->new;
             
 =cut
 
-package Bio::Unitrap::Utils::TrapUtility;
+package Bio::TrapCluster::Utils::TrapUtility;
 
-require "$ENV{'Unitrap'}/unitrap_conf.pl";
+require "$ENV{'TrapCluster'}/trapcluster_conf.pl";
 my %conf =  %::conf;
 my $debug = $conf{'global'}{'debug'};
 
@@ -31,20 +31,20 @@ use Carp;
 use Data::Dumper;
 use vars qw(@ISA);
 use File::Spec;
-use Bio::Unitrap::Utils::Argument qw(rearrange);
-use Bio::Unitrap::Utils::Exception qw(throw warning deprecate);
+use Bio::TrapCluster::Utils::Argument qw(rearrange);
+use Bio::TrapCluster::Utils::Exception qw(throw warning deprecate);
 use Bio::EnsEMBL::Registry;
 use Bio::EnsEMBL::DBSQL::DBAdaptor;
 use Bio::EnsEMBL::Intron;
 use Bio::SeqIO;
 
-use Bio::Unitrap::Region;
+use Bio::TrapCluster::Region;
 
 @ISA = qw(Bio::Root::Root Bio::SeqIO);
 
 #setting global variables
 
-require "$ENV{'Unitrap'}/unitrap_conf.pl";
+require "$ENV{'TrapCluster'}/trapcluster_conf.pl";
 
 sub new{
   	my $caller = shift;
@@ -63,7 +63,7 @@ sub new{
 	
 	
 	$load && $self->load($load);
-	my $region = Bio::Unitrap::Region->new(-LOAD=>$load);
+	my $region = Bio::TrapCluster::Region->new(-LOAD=>$load);
 	$region && $self->region($region);
   	return $self;
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-=head1 Bio::Unitrap::AnnotationTrap
+=head1 Bio::TrapCluster::AnnotationTrap
 
 =head2 Authors
 
@@ -20,11 +20,11 @@
              
 =head2 Usage
 
-	    my $obj = Bio::Unitrap::AnnotationTrap->new;
+	    my $obj = Bio::TrapCluster::AnnotationTrap->new;
             
 =cut
 
-package Bio::Unitrap::AnnotationTrap;
+package Bio::TrapCluster::AnnotationTrap;
 
 use strict;
 use DBI;
@@ -32,8 +32,8 @@ use Carp;
 use Data::Dumper;
 use vars qw(@ISA);
 use File::Spec;
-use Bio::Unitrap::Utils::Argument qw(rearrange);
-use Bio::Unitrap::Utils::Exception qw(throw warning deprecate);
+use Bio::TrapCluster::Utils::Argument qw(rearrange);
+use Bio::TrapCluster::Utils::Exception qw(throw warning deprecate);
 use Bio::EnsEMBL::Registry;
 use Bio::EnsEMBL::DBSQL::DBAdaptor;
 use Bio::EnsEMBL::Intron;
@@ -42,22 +42,22 @@ use Bio::EnsEMBL::Intron;
 
 #setting global variables
 
-require "$ENV{'Unitrap'}/unitrap_conf.pl";
+require "$ENV{'TrapCluster'}/trapcluster_conf.pl";
 
 my %conf =  %::conf;
 my $debug = $conf{'global'}{'debug'};
 
 use Bio::SeqIO;
 use Bio::SearchIO;
-use Bio::Unitrap::Utils::File;
-use Bio::Unitrap::LoadTrap;
-use Bio::Unitrap::Region;
-use Bio::Unitrap::Utils::TrapUtility;
+use Bio::TrapCluster::Utils::File;
+use Bio::TrapCluster::LoadTrap;
+use Bio::TrapCluster::Region;
+use Bio::TrapCluster::Utils::TrapUtility;
 
 =head2 new
 
   Arg [..]: Take a set of named argumnts from a config file
-  Example: my $retrieve = Bio::Unitrap::RetrieveTrap->new
+  Example: my $retrieve = Bio::TrapCluster::RetrieveTrap->new
   Description:
   Returntype:
   Exceptions: source (fromfile, fromdb, fromquery) not defined;
@@ -116,11 +116,11 @@ sub new{
 	$registry && $self->registry($registry);
 	$slice_core_adaptor && $self->slicecoreadpt($slice_core_adaptor);
 	$slice_est_adaptor && $self->sliceestadpt($slice_est_adaptor);
-	my $load = Bio::Unitrap::LoadTrap->new;
+	my $load = Bio::TrapCluster::LoadTrap->new;
 	$load && $self->load($load);
-	my $utility = Bio::Unitrap::Utils::TrapUtility->new(-LOAD=>$load);
+	my $utility = Bio::TrapCluster::Utils::TrapUtility->new(-LOAD=>$load);
 	$utility && $self->trap_utility($utility);
-	my $region = Bio::Unitrap::Region->new(
+	my $region = Bio::TrapCluster::Region->new(
 											-LOAD=>$load,
 											-REGISTRY =>$registry);
 	$region && $self->region($region);
@@ -459,7 +459,7 @@ sub annotate_with_ensembl_genescan {
 		die;
 	}
 	
-	#WHICH IS COLLED GENE HERE IS ACTUALLY A PREDICT TRANSCRIPT
+	#WHICH IS CALLED GENE HERE IS ACTUALLY A PREDICT TRANSCRIPT
 	$hash->{'trapmap_region'}{'trapmap_id'} = $trapmap_id;
 	print STDERR "------ got here 706\n";
 	foreach my $gene (@{$slice->get_all_PredictionTranscripts}) {
@@ -1450,7 +1450,7 @@ sub annotate {
 		$hash->{'trap'} = $trap;
 		$hash->{'tmf'} = $tmf;
 		my $slice_core_adaptor = $self->slicecoreadpt;
-			my $slice_core = $slice_core_adaptor->fetch_by_region($region,$rhref->{'hit_id'}, $rhref->{'start'}, $rhref->{'end'});
+		my $slice_core = $slice_core_adaptor->fetch_by_region($region,$rhref->{'hit_id'}, $rhref->{'start'}, $rhref->{'end'});
 		my $found = 0;
 		if ($self->do_ensgene) {
 			

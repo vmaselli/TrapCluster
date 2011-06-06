@@ -1,4 +1,4 @@
-=head1 Bio::Unitrap::Fetch
+=head1 Bio::TrapCluster::Fetch
 
 =head2 Author
 
@@ -15,7 +15,7 @@
 =cut
 
 
-package Bio::Unitrap::Fetch;
+package Bio::TrapCluster::Fetch;
 
 use strict;
 use DBI;
@@ -23,12 +23,12 @@ use Carp;
 use Data::Dumper;
 use File::Spec;
 use vars qw(@ISA);
-require "$ENV{'Unitrap'}/unitrap_conf.pl";
-use Bio::Unitrap::Utils::Exception qw(throw warning deprecate);
+require "$ENV{'TrapCluster'}/trapcluster_conf.pl";
+use Bio::TrapCluster::Utils::Exception qw(throw warning deprecate);
 use Bio::EnsEMBL::DBSQL::DBAdaptor;
 use Bio::Root::Root; 
-use Bio::Unitrap::Utils::DBSQL::DB;
-@ISA = qw(Bio::Root::Root Bio::Unitrap::Utils::DBSQL::DB);
+use Bio::TrapCluster::Utils::DBSQL::DB;
+@ISA = qw(Bio::Root::Root Bio::TrapCluster::Utils::DBSQL::DB);
 
 
 
@@ -145,6 +145,13 @@ sub get_trap_by_id{
 	my $query = qq{select t.*, e.*, p.* from trap t, esclone e, project p where e.esclone_id = t.esclone_id and p.project_id = e.project_id and trap_id = $id };
 	my $trap = $self->select_from_table($query);
   	return $trap;
+}
+
+sub get_trapcluster_by_id{
+	my ($self, $id) = @_;
+	my $query = qq{select t.* from trapcluster where  t.trapcluster_id = $id };
+	my $trapcluster = $self->select_from_table($query);
+  	return $trapcluster;
 }
 
 sub get_trap_id_by_name{

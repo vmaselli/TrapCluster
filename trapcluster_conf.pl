@@ -103,7 +103,7 @@ BEGIN {
 													 },
 						'genomic_blat' => 0,
 						'mrna_blat' => 0,
-						'wrap_dir' =>"$ENV{'Unitrap'}/wrap" #Directory where shell scripts for cluster jobs are written
+						'wrap_dir' =>"$ENV{'TrapCluster'}/wrap" #Directory where shell scripts for cluster jobs are written
 		
 		},
 		#Configuration for which annotations should be performed

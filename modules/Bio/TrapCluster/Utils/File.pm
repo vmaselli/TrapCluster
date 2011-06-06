@@ -19,7 +19,7 @@
 =head2 Example
 
 	  my $file = Bio::File->writeDataToFile("my file","my dir", "my data", 1);
-	  my $read_content = Bio::Unitrap::File->readFileData($file,"my dir",1);
+	  my $read_content = Bio::TrapCluster::File->readFileData($file,"my dir",1);
 	  my $file = Bio::File->appendDataToFile($file,"my dir", "my new data",, 1);
 
 	  my %hash = Bio::File->fromFastaFileToHash($file,$dir,1);
@@ -28,7 +28,7 @@
 =cut
 
 
-package Bio::Unitrap::Utils::File;
+package Bio::TrapCluster::Utils::File;
 
 use strict;
 use vars qw(@ISA);

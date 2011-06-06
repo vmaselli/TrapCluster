@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-=head1 Bio::Unitrap::Region
+=head1 Bio::TrapCluster::Region
 
 =head2 Authors
 
@@ -15,11 +15,11 @@
              
 =head2 Usage
 
-	    my $obj = Bio::Unitrap::Region->new;
+	    my $obj = Bio::TrapCluster::Region->new;
             
 =cut
 
-package Bio::Unitrap::Region;
+package Bio::TrapCluster::Region;
 
 use strict;
 use DBI;
@@ -27,8 +27,8 @@ use Carp;
 use Data::Dumper;
 use vars qw(@ISA);
 use File::Spec;
-use Bio::Unitrap::Utils::Argument qw(rearrange);
-use Bio::Unitrap::Utils::Exception qw(throw warning deprecate);
+use Bio::TrapCluster::Utils::Argument qw(rearrange);
+use Bio::TrapCluster::Utils::Exception qw(throw warning deprecate);
 use Bio::EnsEMBL::Registry;
 use Bio::EnsEMBL::DBSQL::DBAdaptor;
 use Bio::EnsEMBL::Intron;
@@ -37,7 +37,7 @@ use Bio::EnsEMBL::Intron;
 
 #setting global variables
 
-require "$ENV{'Unitrap'}/unitrap_conf.pl";
+require "$ENV{'TrapCluster'}/trapcluster_conf.pl";
 my %conf =  %::conf;
 my $debug = $conf{'global'}{'debug'};
 

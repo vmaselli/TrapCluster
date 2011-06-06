@@ -1,4 +1,4 @@
-package Bio::Unitrap::Params;
+package Bio::TrapCluster::Params;
 
 use strict;
 

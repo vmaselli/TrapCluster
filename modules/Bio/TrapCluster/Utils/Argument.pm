@@ -17,11 +17,11 @@
 
 =head1 NAME
 
-Bio::UniTrap::Utils::Argument - Utility functions for argument handling
+Bio::TrapCluster::Utils::Argument - Utility functions for argument handling
 
 =head1 SYNOPSIS
 
-  use Bio::UniTrap::Utils::Argument qw(rearrange)
+  use Bio::TrapCluster::Utils::Argument qw(rearrange)
 
   package Feature;
 
@@ -43,13 +43,13 @@ a static class method.  This method was originally written by Lincoln
 Stein, and has since been refactored several times by various people (as described below).
 
 It is recommended that this package be used instead of inheriting
-unnecessarily from the Bio::UniTrap::Root or Bio::Root object.
+unnecessarily from the Bio::TrapCluster::Root or Bio::Root object.
 
 =head1 METHODS
 
 =cut
 
-package Bio::UniTrap::Utils::Argument;
+package Bio::TrapCluster::Utils::Argument;
 
 use strict;
 use warnings;
@@ -65,7 +65,7 @@ use vars qw(@ISA @EXPORT);
 
  Usage     : rearrange( array_ref, list_of_arguments)
  Purpose   : Rearranges named parameters to requested order.
- Example   : use Bio::UniTrap::Utils::Argument qw(rearrange);
+ Example   : use Bio::TrapCluster::Utils::Argument qw(rearrange);
            : rearrange([qw(SEQUENCE ID DESC)],@param);
            : Where @param = (-sequence => $s, 
 	         :                 -id       => $i, 
@@ -87,7 +87,7 @@ use vars qw(@ISA @EXPORT);
            : then adapted for use in Bio::Root::Object.pm by Steve A. Chervitz.
            then adapted for use in UniTrap by Vincenza Maselli.
            : This has since been adapted as an exported static method in this 
-             class Bio::UniTrap::Utils::Argument 
+             class Bio::TrapCluster::Utils::Argument 
  Comments  : (SAC)
            : This method may not be appropriate for method calls that are
            : within in an inner loop if efficiency is a concern.
@@ -124,7 +124,7 @@ use vars qw(@ISA @EXPORT);
 sub rearrange {
   my $order = shift;
 
-  if ( $order eq "Bio::UniTrap::Utils::Argument" ) {
+  if ( $order eq "Bio::TrapCluster::Utils::Argument" ) {
     # skip object if one provided
     $order = shift;
   }

@@ -1,4 +1,4 @@
-=head1 Bio::Unitrap::Utils::DBSQL::DB
+=head1 Bio::TrapCluster::Utils::DBSQL::DB
 
 =head2 Authors
 
@@ -69,10 +69,10 @@
 =cut
 
 BEGIN{
-	require "$ENV{'Unitrap'}/unitrap_conf.pl";
+	require "$ENV{'TrapCluster'}/trapcluster_conf.pl";
 }
 
-package Bio::Unitrap::Utils::DBSQL::DB;
+package Bio::TrapCluster::Utils::DBSQL::DB;
 
 use strict;
 use DBI;
@@ -84,7 +84,7 @@ use vars qw(@ISA);
 use constant ER_LOCK_WAIT_TIMEOUT => 1205;
 use constant ER_LOCK_DEADLOCK => 1213;
 
-use Bio::Unitrap::Utils::Exception qw(throw warning deprecate);
+use Bio::TrapCluster::Utils::Exception qw(throw warning deprecate);
 use Bio::EnsEMBL::DBSQL::DBAdaptor;
 use Bio::Root::Root; 
 @ISA = qw(Bio::Root::Root);
@@ -267,7 +267,6 @@ sub prepare_stmt {
 	   # You can report the error using $error and $message
 	   print STDERR "ERROR: $error \nMESSAGE: $message\n";
 	}
-   	
     $self->{'prepare_stmt'} = $sth;
     return $self->{'prepare_stmt'};
 }

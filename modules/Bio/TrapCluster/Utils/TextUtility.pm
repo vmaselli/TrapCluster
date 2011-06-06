@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-=head1 Bio::Unitrap::LoadTrap
+=head1 Bio::TrapCluster::LoadTrap
 
 =head2 Authors
 
@@ -17,7 +17,7 @@ This module read information from file/web/local database and load the table
 
 =cut
 
-package Bio::Unitrap::Utils::TextUtility;
+package Bio::TrapCluster::Utils::TextUtility;
 
 
 use strict; 
@@ -28,21 +28,21 @@ use vars qw(@ISA);
 use Const::Fast;
 use IO::File;
 
-require "$ENV{'Unitrap'}/unitrap_conf.pl";
+require "$ENV{'TrapCluster'}/trapcluster_conf.pl";
 my %conf =  %::conf;
 my $ucsc_db_name = $conf{'default'}{'db_name'};
-use Bio::Unitrap::Utils::Argument qw(rearrange); 
-use Bio::Unitrap::Utils::Exception qw(throw warning deprecate);
+use Bio::TrapCluster::Utils::Argument qw(rearrange); 
+use Bio::TrapCluster::Utils::Exception qw(throw warning deprecate);
 use Bio::SeqFeature::Generic;
 use Bio::Tools::GFF;
 use Bio::SeqIO;
 use File::Spec;
 @ISA = qw(Bio::Root::Root);
 
-use Bio::Unitrap::Fetch;
-use Bio::Unitrap::Utils::DBSQL::DB;
-my $fetch = Bio::Unitrap::Fetch->new;
-my $db = Bio::Unitrap::Utils::DBSQL::DB->new;
+use Bio::TrapCluster::Fetch;
+use Bio::TrapCluster::Utils::DBSQL::DB;
+my $fetch = Bio::TrapCluster::Fetch->new;
+my $db = Bio::TrapCluster::Utils::DBSQL::DB->new;
 my $tmpdir = $conf{'default'}{'tmp_dir'};
 my $time = localtime;
 $time =~ s/ /-/g;
@@ -161,7 +161,7 @@ sub get_all_trap_fasta{
 	  	
 	  	my $trapname = "ti|".$trap->{'trap_id'}."|gi|".$trap->{'gb_id'}."|gb|".$trap->{'gb_locus'}."|".$trap->{'gss_id'}."|".$trap->{'trap_name'}."|".$trap->{'clone_id'}."|".$trap->{'mol_type'}."|".$trap->{'strain'}."|".$trap->{'cell_line'}."|".$trap->{'vector_name'};
 	  	my $sequence = $trap->{'sequence'};
-	  	Bio::Unitrap::Utils::File->writeFasta($file,$tmpdir,1,$trapname,$sequence);
+	  	Bio::TrapCluster::Utils::File->writeFasta($file,$tmpdir,1,$trapname,$sequence);
 	}
 }
 
@@ -206,7 +206,7 @@ sub get_all_trap_by_project_fasta{
 	  	my $trapname = "ti|".$trap->{'trap_id'}."|gi|".$gb."|gb|".$gbacc."|".$gssid."|".$trap->{'trap_name'}."|".$clone_id."|".$mol_type."|".$strain."|".$cell_line."|".$vector_name;
 	  	
 	  	my $sequence = $trap->{'sequence'};
-	  	Bio::Unitrap::Utils::File->writeFasta($file,$tmpdir,1,$trapname,$sequence);
+	  	Bio::TrapCluster::Utils::File->writeFasta($file,$tmpdir,1,$trapname,$sequence);
 	  	
 	}
 }
@@ -250,7 +250,7 @@ sub get_trap_by_id_fasta{
 	my $trapname = "ti|".$trap->{'trap_id'}."|gi|".$gb."|gb|".$gbacc."|".$gssid."|".$trap->{'trap_name'}."|".$clone_id."|".$mol_type."|".$strain."|".$cell_line."|".$vector_name;
 	
 	my $sequence = $trap->{'sequence'};
-	my $file = Bio::Unitrap::Utils::File->writeFasta($file_name,$tmpdir,1,$trapname,$sequence);
+	my $file = Bio::TrapCluster::Utils::File->writeFasta($file_name,$tmpdir,1,$trapname,$sequence);
 	return $file;  	
 }
 
@@ -305,7 +305,7 @@ sub get_trap_by_id_range_fasta{
 		my $trapname = "ti|".$trap->{'trap_id'}."|gi|".$gb."|gb|".$gbacc."|".$gssid."|".$trap->{'trap_name'}."|".$clone_id."|".$mol_type."|".$strain."|".$cell_line."|".$vector_name;
 		
 		my $sequence = $trap->{'sequence'};
-		$file = Bio::Unitrap::Utils::File->writeFasta($file_name,$tmpdir,1,$trapname,$sequence);
+		$file = Bio::TrapCluster::Utils::File->writeFasta($file_name,$tmpdir,1,$trapname,$sequence);
 	}
 	return $file;  	
 }
@@ -321,11 +321,11 @@ sub get_unitrap_bed{
 	my $trapsorted_file = File::Spec->catfile($dir,"trapsorted.bed");
 	my $unitrap_bbfile = File::Spec->catfile($dir,"unitrap.bb");
 	my $trap_bbfile = File::Spec->catfile($dir,"trap.bb");
-	my $chrsizes = File::Spec->catfile("$ENV{'Unitrap'}/data/",$ucsc_db_name.".chrom.sizes");
+	my $chrsizes = File::Spec->catfile("$ENV{'TrapCluster'}/data/",$ucsc_db_name.".chrom.sizes");
 	open (UNI, ">$unitrap_file");
 	open (TRP, ">$trap_file");
 	
-	system "$ENV{'Unitrap'}/scripts/utils/fetchChromSizes $ucsc_db_name > $chrsizes";
+	system "$ENV{'TrapCluster'}/scripts/utils/fetchChromSizes $ucsc_db_name > $chrsizes";
 	open (CHR, $chrsizes);
 	my %chrh;
 	while (my $r = <CHR>){
@@ -385,8 +385,8 @@ sub get_unitrap_bed{
   	system "sort -k1,1 -k2,2n $trap_file > $trapsorted_file";
   	system "sort -k1,1 -k2,2n $unitrap_file > $unitrapsorted_file";
 	print "converting files \n";
-  	system "$ENV{'Unitrap'}/scripts/utils/bedToBigBed $trapsorted_file $chrsizes $trap_bbfile";
-  	system "$ENV{'Unitrap'}/scripts/utils/bedToBigBed $unitrapsorted_file $chrsizes $unitrap_bbfile";
+  	system "$ENV{'TrapCluster'}/scripts/utils/bedToBigBed $trapsorted_file $chrsizes $trap_bbfile";
+  	system "$ENV{'TrapCluster'}/scripts/utils/bedToBigBed $unitrapsorted_file $chrsizes $unitrap_bbfile";
   	
   	print "track type=bigBed name=\"TRAP\" description=\"A bigBed trap file\" 	bigDataUrl=http://www2.cancer.ucl.ac.uk/stupkalab/idcc-unitrap/$trap_bbfile\n";
   	print "track type=bigBed name=\"UNITRAP\" description=\"A bigBed unitrap file\" 	bigDataUrl=http://www2.cancer.ucl.ac.uk/stupkalab/idcc-unitrap/$unitrap_bbfile\n";

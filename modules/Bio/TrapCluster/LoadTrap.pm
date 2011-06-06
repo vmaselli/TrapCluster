@@ -22,8 +22,8 @@ This module read information from file/web/local database and load the table
 
 =cut
 
-package Bio::Unitrap::LoadTrap;
-require "$ENV{'Unitrap'}/unitrap_conf.pl";
+package Bio::TrapCluster::LoadTrap;
+require "$ENV{'TrapCluster'}/trapcluster_conf.pl";
 
 use strict; 
 use DBI; 
@@ -31,8 +31,8 @@ use Carp;
 use Data::Dumper; 
 use vars qw(@ISA);
 
-use Bio::Unitrap::Utils::Argument qw(rearrange); 
-use Bio::Unitrap::Utils::Exception qw(throw warn deprecate);
+use Bio::TrapCluster::Utils::Argument qw(rearrange); 
+use Bio::TrapCluster::Utils::Exception qw(throw warn deprecate);
 use Bio::Search::HSP::HSPFactory;
 @ISA = qw(Bio::Root::Root);
 
@@ -48,16 +48,16 @@ my $tmpdir = $conf{'default'}{'tmp_dir'};
 my $base_keyword =$conf{'retrieve'}{'base_keyword'};
 my $swarm = $conf{'global'}{'swarm'};
  
-use Bio::Unitrap::Utils::File;
-use Bio::Unitrap::Fetch;
+use Bio::TrapCluster::Utils::File;
+use Bio::TrapCluster::Fetch;
 use Bio::SeqIO;
 
 =head2 new
 
   Arg [..]: Take a set of named argumnts from a config file
-  Example: my $retrieve = Bio::Unitrap::RetrieveTrap->new
+  Example: my $retrieve = Bio::TrapCluster::RetrieveTrap->new
   Description:
-  Returntype: Bio::Unitrap::
+  Returntype: Bio::TrapCluster::
   Exceptions: source (fromfile, fromdb, fromquery) not defined;
   Caller:
   Status: 
@@ -71,7 +71,7 @@ sub new{
   my $self = $class->SUPER::new(@_);
 
  
-  my $fetch = Bio::Unitrap::Fetch->new;  
+  my $fetch = Bio::TrapCluster::Fetch->new;  
   $self->fetch($fetch);
   return $self;
 }
@@ -485,6 +485,165 @@ sub load_trapmap {
 	
 }
 
+sub load_maxicluster{
+	my ($self, $hash, $analysis) = @_;
+	
+	my $maxicluster_accession = $maxiclustermap_toinsert{'accession'};
+	
+	my $query = qq{SELECT maxicluster_id FROM maxicluster WHERE  `accession` = \"$maxicluster_accession\"  };
+	
+	my $maxiclustermap_id = $self->fetch->select_from_table($query)->{'maxicluster_id'};
+	unless($maxiclustermap_id){
+		my $insert = qq{INSERT INTO maxicluster SET  `accession` = \"$maxicluster_accession\"};
+		$maxiclustermap_id = $self->fetch->store($insert);
+	}
+	
+	return $maxiclustermap_id;
+	
+}
+
+
+sub load_maxiclustermap {
+	my ($self, $hash, $analysis) = @_;
+	my $hit_id = $hash->{'hit_id'};
+	my $hit_db = $conf{'default'}{'hit_db'};
+	my $start = $hash->{'start'}; #start della hit 
+  	my $end = $hash->{'end'}; #end della hit
+  	my $strand = $hash->{'strand'};
+	
+	my $query = qq{SELECT maxiclustermap_id FROM maxiclustermap WHERE  `hit_id` = \"$hit_id\" AND `hit_db` = \"$hit_db\" AND `start` = $start AND `end` = $end  };
+	
+	my $maxiclustermap_id = $self->fetch->select_from_table($query)->{'maxicluster_id'};
+	unless($maxiclustermap_id){
+		my $insert = qq{INSERT INTO maxiclustermap SET  `hit_id` = \"$hit_id\", `hit_db` = \"$hit_db\", `start` = $start, `end` = $end, `strand` = \"$strand\", `analysis_id` = $analysis_id};
+		$maxiclustermap_id = $self->fetch->store($insert);
+	}
+	
+	return $maxiclustermap_id;
+	
+}
+
+
+sub load_maxiclusterblock {
+	my ($self, $hash) = @_;
+	my $maxiclustermap_id = $hash->{'maxiclustermap_id'};
+	my $start = $hash->{'start'}; #start della hit 
+  	my $end = $hash->{'end'}; #end della hit
+  	my $sequence = $hash->{'sequence'};
+
+	my $query = qq{SELECT maxiclusterblock_id FROM maxiclusterblock WHERE `start` = $start AND `end` = $end AND  maxiclustermap_id = $maxiclustermap_id};
+	
+	my $maxiclusterblock_id = $self->fetch->select_from_table($query)->{'maxiclusterblock_id'};
+	unless($maxiclusterblock_id){
+		my $insert = qq{INSERT INTO maxiclusterblock SET  `start` = $start, `end` = $end, `strand` = \"$strand\", `maxiclustermap_id` = $maxiclustermap_id, `sequence` = \"$sequence\"};
+		$maxiclusterblock_id = $self->fetch->store($insert);
+	}
+	
+	return $maxiclusterblock_id;
+	
+}
+
+
+sub load_trap_maxicluster {
+	my ($self, $hash) = @_;
+	my $trap_id = $hash->{'trap_id'};
+	my $trapmap_id = $hash->{'trapmap_id'};
+	my $maxicluster_id = $hash->{'maxicluster_id'};
+	my $query = qq{SELECT trap_maxicluster_id FROM trap_maxicluster WHERE trap_id = $trap_id AND trapmap_id = $trapmap_id};
+	
+	my $trap_maxicluster_id = $self->fetch->select_from_table($query)->{'trap_maxicluster_id'};
+	
+	unless($trap_maxicluster_id){
+		my $insert = qq{INSERT INTO trap_maxicluster SET trap_id = $trap_id, maxicluster_id = $maxicluster_id, trapmap_id = $trapmap_id };
+		$trap_maxicluster_id = $self->fetch->store($insert);
+	}
+
+	return $trap_maxicluster_id;
+	
+}
+
+sub load_trapclustermap {
+	my ($self, $hash) = @_;
+	my $hit_id = $hash->{'hit_id'};
+	my $hit_db = $conf{'default'}{'hit_db'};
+	my $start = $hash->{'start'}; #start della hit 
+  	my $end = $hash->{'end'}; #end della hit
+  	my $strand = $hash->{'strand'};
+  	my $trapcluster_id = $hash->{'trapcluster_id'}
+
+	my $query = qq{SELECT trapclustermap_id FROM trapclustermap WHERE `trapcluster_id` = $trapcluster_id AND `hit_id` = \"$hit_id\" AND `hit_db` = \"$hit_db\" AND `start` = $start AND `end` = $end  AND  `strand` = \"$strand\"};
+	
+	my $trapclustermap_id = $self->fetch->select_from_table($query)->{'trapclustermap_id'};
+	unless($trapclustermap_id){
+		my $insert = qq{INSERT INTO trapclustermap SET  `trapcluster_id` = $trapcluster_id, `hit_id` = \"$hit_id\", `hit_db` = \"$hit_db\", `start` = $start, `end` = $end, `strand` = \"$strand\",};
+		$trapclustermap_id = $self->fetch->store($insert);
+		$self->update_trapclustercheck(1,0, $trapcluster_id);
+	}
+	return $trapclustermap_id;
+	
+}
+
+sub load_trapclusterblock {
+	my ($self, $hash) = @_;
+	my $trapclustermap_id = $hash->{'trapclustermap_id'};
+	my $start = $hash->{'start'}; #start della hit 
+  	my $end = $hash->{'end'}; #end della hit
+  	my $sequence = $hash->{'sequence'};
+
+	my $query = qq{SELECT trapclusterblock_id FROM trapclusterblock WHERE `start` = $start AND `end` = $end AND  trapclustermap_id = $trapclustermap_id};
+	
+	my $trapclusterblock_id = $self->fetch->select_from_table($query)->{'trapclusterblock_id'};
+	unless($trapclusterblock_id){
+		my $insert = qq{INSERT INTO trapclusterblock SET  `start` = $start, `end` = $end, `strand` = \"$strand\", `trapclustermap_id` = $trapclustermap_id, `sequence` = \"$sequence\"};
+		$trapclusterblock_id = $self->fetch->store($insert);
+	}
+	
+	return $trapclusterblock_id;
+	
+}
+
+
+sub load_trap_trapcluster {
+	my ($self, $hash) = @_;
+	my $trap_id = $hash->{'trap_id'};
+	my $trapmap_id = $hash->{'trapmap_id'};
+	my $trapcluster_id = $hash->{'trapcluster_id'};
+	my $query = qq{SELECT trap_trapcluster_id FROM trap_trapcluster WHERE trap_id = $trap_id AND trapmap_id = $trapmap_id};
+	
+	my $trap_trapcluster_id = $self->fetch->select_from_table($query)->{'trap_trapcluster_id'};
+	
+	unless($trap_trapcluster_id){
+		my $insert = qq{INSERT INTO trap_trapcluster SET trap_id = $trap_id, trapcluster_id = $trapcluster_id, trapmap_id = $trapmap_id };
+		$trap_trapcluster_id = $self->fetch->store($insert);
+	}
+
+	return $trap_trapcluster_id;	
+}
+
+
+
+sub load_trapcluster{
+	my ($self, $hash) = @_;
+	
+	my $trapcluster_accession = $hash->{'accession'};
+	my $maxicluster_id = $hash->{'maxicluster_id'};
+	my $ens = $hash->{'link_to_ensembl'};
+	my $ucsc = $hash->{'link_to_ucsc'};
+	
+	my $query = qq{SELECT trapcluster_id FROM trapcluster WHERE  `accession` = \"$trapcluster_accession\"  };
+	
+	my $trapcluster_id = $self->fetch->select_from_table($query)->{'trapcluster_id'};
+	unless($trapclustermap_id){
+		my $insert = qq{INSERT INTO trapcluster SET  `accession` = \"$trapcluster_accession\", maxicluster_id = $maxicluster_id, link_to_ensembl = \"$ens\", link_to_ucsc = \"$ucsc\"};
+		$trapclustermap_id = $self->fetch->store($insert);
+	}
+	
+	return $trapclustermap_id;
+	
+}
+
+
+
 sub load_exonerate_trapmap {
 	my ($self, $hit, $trap_id) = @_;
 	
@@ -522,6 +681,79 @@ sub load_exonerate_trapmap {
 	return $trapmap_id;	
 }
 
+
+sub load_trapclustermap_region{
+	my ($self, $hash) = @_;
+	my $region_id = $hash->{'region_id'};
+	my $trapclustermap_id =  $hash->{'trapclustermap_id'};
+	my $annotation_ambigous = $hash->{'annotation_ambiguous'};	
+	my $number_trapclusterblocks = $hash->{'number_trapclusterblocks'};
+	$number_trapclusterblocks ||=0;
+	my $number_annotated_trapclusterblocks = $hash->{'number_annotated_trapclusterblocks'};
+	unless ($number_annotated_trapclusterblocks){$number_annotated_trapclusterblocks = 0}
+	my $exons = $hash->{'total_number_exons'};
+	$exons ||= 0;
+	my $overlap = $hash->{'overlap'};
+	unless ($overlap){$overlap = 0}
+	my $type = $hash->{'type'};
+	my $query = qq{SELECT trapclustermap_region_id FROM `trapclustermap_region` WHERE `region_id` = $region_id AND `type` = \"$type\"  AND `trapclustermap_id` = $trapclustermap_id};
+	my $trapclustermap_region_id = $self->fetch->get_trapclustermap_region_id_by_query($query);
+	unless ($trapclustermap_region_id){
+		my $insert = qq{INSERT INTO trapclustermap_region SET `region_id` = $region_id, `type` = \"$type\", `annotation_ambiguous` = $annotation_ambigous, `total_number_exons` = $exons,`number_trapclusterblocks` = $number_trapclusterblocks, `number_annotated_trapclusterblocks` = $number_annotated_trapclusterblocks, `overlap` = $overlap, `trapclustermap_id` = $trapclustermap_id};
+		$trapclustermap_region_id = $self->fetch->store($insert);
+		#$debug && print STDERR "$insert\n";
+	}
+	else{$debug && print STDERR "\t\tLoadtrapcluster->load_trapclustermap_region $type ALREADY MAPPED\n";}
+	return $trapclustermap_region_id;
+
+}
+
+sub load_trapcluster_annotation{
+	my ($self, $hash) = @_;
+	my $failure;
+	my $trapblock_annotation_id = $self->load_trapclusterblock_annotation($hash);
+		$failure = "insert failure for ".$hash->{'display_name'}." - ";
+		$failure .= $hash->{'region_id'} if $hash->{'region_id'};
+		unless($trapblock_annotation_id){my $error_id =$self->load_error($failure,"trapblock_annotation");warn("$failure")}
+		
+	return $trapblock_annotation_id;
+}
+
+sub load_trapclusterblock_annotation{
+	my ($self, $hash) = @_;
+	$debug && print STDERR "line 365 ";
+	$debug && print STDERR ref $self;
+	$debug && print STDERR "->load_trapclusterblock_annotation\n";
+	my $trapclusterblock_id = $hash->{'trapclusterblock_id'};
+	my $rank = 0;
+	$rank = $hash->{'rank'} if defined $hash->{'rank'};
+	my $display_name = $hash->{'display_name'};
+	my $dS_s = 0;
+	$dS_s =  $hash->{'dS_s'} if defined $hash->{'dS_s'};
+	my $dE_e = 0;
+	$dE_e = $hash->{'dE_e'} if defined $hash->{'dE_e'};
+	my $logic_name = $hash->{'logic_name'};
+	my $source_logic_name_id = $self->load_logic_name($logic_name);
+	my $comment = $hash->{'comment'};
+	my $label = $hash->{'label'};
+	my $label_logic_name_id = $self->load_logic_name($label);
+	my $coverage = $hash->{'coverage'};
+	my $region_id = 0;
+	$region_id = $hash->{'region_id'} if defined $hash->{'region_id'};
+	my $flanking_exon_id = 0;
+	$flanking_exon_id = $hash->{'flanking_exon_id'} if defined $hash->{'region_id'};
+	
+	my $type = $self->load_logic_name($hash->{'type'});
+	
+	my $query = qq{SELECT trapclusterblock_annotation_id FROM `trapclusterblock_annotation` WHERE `trapclusterblock_id` = $trapclusterblock_id  AND `display_name` = \"$display_name\" };
+	my $annotation_id = $self->fetch->get_trapclusterblock_annotation_id_by_query($query);
+	unless($annotation_id){
+	
+		my $insert = qq{ INSERT INTO `trapclusterblock_annotation` SET `source_logic_name_id` = $source_logic_name_id, `trapclusterblock_id` = $trapclusterblock_id ,`rank` = $rank , `display_name` = \"$display_name\" , `dS_s` = $dS_s , `dE_e` = $dE_e , `label_logic_name_id` = $label_logic_name_id , `comment` = \"$comment\" , `coverage` = $coverage , `region_id` = $region_id, `flanking_exon_id` = $flanking_exon_id, `type` = $type};
+		$annotation_id = $self->fetch->store($insert);
+	}
+	return $annotation_id;
+}
 sub load_exonerate_trapblock{
 	my ($self,$hit, $trapmap_id, $genomic,$qlen) = @_;
 	

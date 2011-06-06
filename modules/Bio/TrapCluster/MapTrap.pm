@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-=head1 Bio::Unitrap::MapTrap
+=head1 Bio::TrapCluster::MapTrap
 
 =head2 Authors
 
@@ -20,7 +20,7 @@
              
 =head2 Usage
 
-	    my $obj = Bio::Unitrap::MapTrap->new;
+	    my $obj = Bio::TrapCluster::MapTrap->new;
 			my @blasts = @{$obj->run_blast};
 			my @trap_maps = @{$obj->map_trap};
             $obj->load_db(\@trap_maps);
@@ -30,7 +30,7 @@
             
 =cut
 
-package Bio::Unitrap::MapTrap;
+package Bio::TrapCluster::MapTrap;
 
 use strict;
 use DBI;
@@ -38,14 +38,14 @@ use Carp;
 use Data::Dumper;
 use vars qw(@ISA);
 use File::Spec;
-use Bio::Unitrap::Utils::Argument qw(rearrange);
-use Bio::Unitrap::Utils::Exception qw(throw warning deprecate);
+use Bio::TrapCluster::Utils::Argument qw(rearrange);
+use Bio::TrapCluster::Utils::Exception qw(throw warning deprecate);
 use Bio::Tools::GFF;
 @ISA = qw(Bio::Root::Root);
 
 #setting global variables
 
-require "$ENV{'Unitrap'}/unitrap_conf.pl";
+require "$ENV{'TrapCluster'}/trapcluster_conf.pl";
 
 my %conf =  %::conf;
 my $debug = $conf{'global'}{'debug'};
@@ -58,17 +58,17 @@ my $run_blast = $conf{'application'}{'run_blast'};
 my $annotation = $conf{'annotation'}{'do'};
 my $mrna_blast = $conf{'application'}{'mrna_blast'};
 my $exonerate_opt = $conf{'application'}{'exonerate'};
-use Bio::Unitrap::LoadTrap;
-use Bio::Unitrap::AnnotationTrap;
+use Bio::TrapCluster::LoadTrap;
+use Bio::TrapCluster::AnnotationTrap;
 use Bio::SeqIO;
 use Bio::SearchIO;
-use Bio::Unitrap::Utils::File;
+use Bio::TrapCluster::Utils::File;
 use Bio::SeqFeature::Generic;
-use Bio::Unitrap::RetrieveTrap;
+use Bio::TrapCluster::RetrieveTrap;
 =head2 new
 
   Arg [..]: Take a set of named argumnts from a config file
-  Example: my $retrieve = Bio::Unitrap::RetrieveTrap->new
+  Example: my $retrieve = Bio::TrapCluster::RetrieveTrap->new
   Description:
   Returntype:
   Exceptions: source (fromfile, fromdb, fromquery) not defined;
@@ -108,11 +108,11 @@ sub new{
 	
 	$self->mrna_param($mrna_parameters);
 	$self->exonerate_param($exonerate_parameters);
-	my $load = Bio::Unitrap::LoadTrap->new;
+	my $load = Bio::TrapCluster::LoadTrap->new;
 	$self->load($load);
-	my $ann = Bio::Unitrap::AnnotationTrap->new;
+	my $ann = Bio::TrapCluster::AnnotationTrap->new;
 	$self->annotation($ann);
-	my $retrieve = Bio::Unitrap::RetrieveTrap->new;
+	my $retrieve = Bio::TrapCluster::RetrieveTrap->new;
 	$self->retrieve($retrieve);
 	
 	return $self;
@@ -213,7 +213,7 @@ sub run_blast{
  	my $parameters = $self->mrna_param;
  	
  	if ($type eq 'trap'){
- 		$fasta = Bio::Unitrap::Utils::TextUtility->get_trap_by_id_fasta($item->{'trap_id'});	
+ 		$fasta = Bio::TrapCluster::Utils::TextUtility->get_trap_by_id_fasta($item->{'trap_id'});	
  	}
  	elsif ($type eq 'fasta'){
  		$fasta = $item;
@@ -249,7 +249,7 @@ sub run_exonerate{
  	my $parameters = $self->exonerate_param;
  	
  	if ($type eq 'trap'){
- 		$fasta = Bio::Unitrap::Utils::TextUtility->get_trap_by_id_fasta($item->{'trap_id'});	
+ 		$fasta = Bio::TrapCluster::Utils::TextUtility->get_trap_by_id_fasta($item->{'trap_id'});	
  	}
  	elsif ($type eq 'fasta'){
  		$fasta = $item;
@@ -362,7 +362,7 @@ sub pars_exonerate_results {
 	    if ($annotation){
 			$current = `date`;
 			$debug && print STDERR  "$current - calling anntrap\n";
-			system("perl $ENV{'Unitrap'}/scripts/anntrap.pl -id $trap_id -idcount 1");
+			system("perl $ENV{'TrapCluster'}/scripts/anntrap.pl -id $trap_id -idcount 1");
 			$debug && print STDERR  "$current - finished anntrap call\n";
 		}
 	}
@@ -1150,7 +1150,7 @@ sub _set_chosen_exonerate_hit {
 		$chosen_hit = $hit;
 		$chosen=1;
 		$logic_name = "first choice";
-		$chosen_filter = Bio::Unitrap::LoadTrap->load_logic_name($logic_name);
+		$chosen_filter = Bio::TrapCluster::LoadTrap->load_logic_name($logic_name);
 		$self->update_trapmap($chosen,$multiple,$chosen_filter,$checked,$trapmap_id);
 		$prev_id = $trapmap_id;
 		return 0;

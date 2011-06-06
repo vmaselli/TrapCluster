@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-=head1 Bio::Unitrap::BuildUniTrap
+=head1 Bio::TrapCluster::BuildUniTrap
 
 =head2 Authors
 
@@ -20,11 +20,11 @@
              
 =head2 Usage
 
-	    my $obj = Bio::Unitrap::BuildUniTrap->new;
+	    my $obj = Bio::TrapCluster::BuildUniTrap->new;
             
 =cut
 
-package Bio::Unitrap::BuildUniTrap;
+package Bio::TrapCluster::BuildUniTrap;
 
 use strict;
 use DBI;
@@ -32,17 +32,17 @@ use Carp;
 use Data::Dumper;
 use vars qw(@ISA);
 use File::Spec;
-use Bio::Unitrap::Utils::Argument qw(rearrange);
-use Bio::Unitrap::Utils::Exception qw(throw warning deprecate);
+use Bio::TrapCluster::Utils::Argument qw(rearrange);
+use Bio::TrapCluster::Utils::Exception qw(throw warning deprecate);
 use Bio::EnsEMBL::Registry;
 use Bio::EnsEMBL::DBSQL::DBAdaptor;
-require "$ENV{'Unitrap'}/unitrap_conf.pl";
-@ISA = qw(Bio::Root::Root Bio::Unitrap::AnnotationTrap);
+require "$ENV{'TrapCluster'}/trapcluster_conf.pl";
+@ISA = qw(Bio::Root::Root Bio::TrapCluster::AnnotationTrap);
 
-use Bio::Unitrap::Fetch;
-use Bio::Unitrap::LoadTrap;
-my $fetch = Bio::Unitrap::Fetch->new;
-my $load = Bio::Unitrap::LoadTrap->new;
+use Bio::TrapCluster::Fetch;
+use Bio::TrapCluster::LoadTrap;
+my $fetch = Bio::TrapCluster::Fetch->new;
+my $load = Bio::TrapCluster::LoadTrap->new;
 
 sub new{
   	my $caller = shift;

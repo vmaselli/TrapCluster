@@ -17,16 +17,16 @@
 
 =head1 NAME
 
-Bio::UniTrap::Utils::Exception - Utility functions for error handling
+Bio::TrapCluster::Utils::Exception - Utility functions for error handling
 
 =head1 SYNOPSIS
 
-  use Bio::UniTrap::Utils::Exception
+  use Bio::TrapCluster::Utils::Exception
     qw(throw warning deprecate verbose try catch);
 
   or to get all methods just
 
-  use Bio::UniTrap::Utils::Exception;
+  use Bio::TrapCluster::Utils::Exception;
 
   eval { throw("this is an exception with a stack trace") };
   if ($@) {
@@ -67,7 +67,7 @@ Bio::UniTrap::Utils::Exception - Utility functions for error handling
 This is derived from the Bio::Root module in BioPerl.  Some formatting
 has been changed and the deprecate function has been added.  Most
 notably the object methods are now static class methods that can be
-called without inheriting from Bio::Root or Bio::UniTrap::Root.  This is
+called without inheriting from Bio::Root or Bio::TrapCluster::Root.  This is
 especially useful for throwing exceptions with stack traces outside of a
 blessed context.
 
@@ -75,7 +75,7 @@ The originaly implementations of these methods were by Steve Chervitz
 and refactored by Ewan Birney.
 
 It is recommended that these functions be used instead of inheriting
-unnecessarily from the Bio::UniTrap::Root or Bio::Root object.  The
+unnecessarily from the Bio::TrapCluster::Root or Bio::Root object.  The
 functions exported by this package provide a set of useful error
 handling methods.
 
@@ -83,7 +83,7 @@ handling methods.
 
 =cut
 
-package Bio::UniTrap::Utils::Exception;
+package Bio::TrapCluster::Utils::Exception;
 
 use strict;
 use warnings;
@@ -108,7 +108,7 @@ my $DEFAULT_EXCEPTION = 1000;
   Arg [1]    : string $msg
   Arg [2]    : (optional) int $level
                override the default level of exception throwing
-  Example    : use Bio::UniTrap::Utils::Exception qw(throw);
+  Example    : use Bio::TrapCluster::Utils::Exception qw(throw);
                throw('We have a problem');
   Description: Throws an exception which if not caught by an eval will
                provide a stack trace to STDERR and die.  If the verbosity level
@@ -124,12 +124,12 @@ my $DEFAULT_EXCEPTION = 1000;
 sub throw {
   my $string = shift;
 
-  #for backwards compatibility with Bio::UniTrap::Root::throw
+  #for backwards compatibility with Bio::TrapCluster::Root::throw
   #allow to be called as an object method as well as class method
   #Root function now deprecated so call will have the string instead.
 
   $string = shift if(ref($string)); #skip object if one provided
-  $string = shift if($string eq "Bio::UniTrap::Utils::Exception");
+  $string = shift if($string eq "Bio::TrapCluster::Utils::Exception");
 
   my $level  = shift;
 
@@ -156,7 +156,7 @@ sub throw {
   Arg [2]    : (optional) int level
                Override the default level of this warning changning the level
                of verbosity at which it is displayed.
-  Example    : use Bio::UniTrap::Utils::Exception qw(warning)
+  Example    : use Bio::TrapCluster::Utils::Exception qw(warning)
                warning('This is a warning');
   Description: If the verbosity level is higher or equal to the level of this 
                warning then a warning message is printed to STDERR.  If the 
@@ -170,7 +170,52 @@ sub throw {
 
 sub warning {
   my $string = shift;
-  $string = shift if($string eq "Bio::UniTrap::Utils::Exception"); #skip object if one provided
+  $string = shift if($string eq "Bio::TrapCluster::Utils::Exception"); #skip object if one provided
+  my $level  = shift;
+
+   $level = $DEFAULT_WARNING if(!defined($level));
+
+  return if ($VERBOSITY < $level);
+
+  my @caller = caller;
+  my $line = $caller[2] || '';
+
+  #use only 2 subdirs for brevity when reporting the filename
+  my $file;
+  my @path = split(/\//, $caller[1]);
+  $file = pop(@path);
+  my $i = 0;
+  while(@path && $i < 2) {
+    $i++;
+    $file = pop(@path) ."/$file";
+  }
+
+  @caller = caller(1);
+  my $caller_line;
+  my $caller_file;
+  $i=0;
+  if(@caller) {
+     @path = split(/\//, $caller[1]);
+     $caller_line = $caller[2];
+     $caller_file = pop(@path);
+     while(@path && $i < 2) {
+       $i++;
+       $caller_file = pop(@path) ."/$caller_file";
+     }
+  }
+
+  
+  my $out = "\n-------------------- WARNING ----------------------\n".
+              "MSG: $string\n".
+              "FILE: $file LINE: $line\n";
+  $out .=     "CALLED BY: $caller_file  LINE: $caller_line\n" if($caller_file);
+  $out .=     "---------------------------------------------------\n";
+  print STDERR $out;
+}
+
+sub warn {
+  my $string = shift;
+  $string = shift if($string eq "Bio::TrapCluster::Utils::Exception"); #skip object if one provided
   my $level  = shift;
 
    $level = $DEFAULT_WARNING if(!defined($level));
@@ -214,7 +259,6 @@ sub warning {
 }
 
 
-
 =head2 info
 
   Arg [1]    : string $string
@@ -222,7 +266,7 @@ sub warning {
   Arg [2]    : (optional) int $level
                Override the default level of this message so it is displayed at
                a different level of verbosity than it normally would be.
-  Example    : use Bio::UniTrap::Utils::Exception qw(verbose info)
+  Example    : use Bio::TrapCluster::Utils::Exception qw(verbose info)
   Description: This prints an info message to STDERR if verbosity is higher 
                than the level of the message.  By default info messages are not
                displayed.
@@ -234,7 +278,7 @@ sub warning {
 
 sub info {
   my $string = shift;
-  $string = shift if($string eq "Bio::UniTrap::Utils::Exception");
+  $string = shift if($string eq "Bio::TrapCluster::Utils::Exception");
   my $level  = shift;
 
   $level = $DEFAULT_INFO if(!defined($level));
@@ -249,7 +293,7 @@ sub info {
 =head2 verbose
 
   Arg [1]    : (optional) int 
-  Example    : use Bio::UniTrap::Utils::Exception qw(verbose warning);
+  Example    : use Bio::TrapCluster::Utils::Exception qw(verbose warning);
                #turn warnings and everything more important on (e.g. exception)
                verbose('WARNING'); 
                warning("Warning displayed");
@@ -294,7 +338,7 @@ sub info {
 sub verbose {
   if(@_) {
     my $verbosity = shift;
-    $verbosity = shift if($verbosity eq "Bio::UniTrap::Utils::Exception");
+    $verbosity = shift if($verbosity eq "Bio::TrapCluster::Utils::Exception");
     if($verbosity =~ /\d+/) { #check if verbosity is an integer
       $VERBOSITY = $verbosity;
     } else {
@@ -331,7 +375,7 @@ sub verbose {
                creating the dump. This is useful when this is called internally
                from a warning or throw function when the immediate caller and 
                stack_trace_dump function calls are themselves uninteresting.
-  Example    : use Bio::UniTrap::Utils::Exception qw(stack_trace_dump);
+  Example    : use Bio::TrapCluster::Utils::Exception qw(stack_trace_dump);
                print STDERR stack_trace_dump();
   Description: Returns a stack trace formatted as a string
   Returntype : string
@@ -345,7 +389,7 @@ sub stack_trace_dump{
 
   my $levels = 2; #default is 2 levels so stack_trace_dump call is not present
   $levels = shift if(@_);
-  $levels = shift if($levels eq "Bio::UniTrap::Utils::Exception");
+  $levels = shift if($levels eq "Bio::TrapCluster::Utils::Exception");
   $levels = 1 if($levels < 1);
   
   while($levels) {
@@ -370,7 +414,7 @@ sub stack_trace_dump{
 =head2 stack_trace
 
   Arg [1]    : none
-  Example    : use Bio::UniTrap::Utils::Exception qw(stack_trace)
+  Example    : use Bio::TrapCluster::Utils::Exception qw(stack_trace)
   Description: Gives an array to a reference of arrays with stack trace info
                each coming from the caller(stack_number) call
   Returntype : array of listrefs of strings
@@ -401,7 +445,7 @@ sub stack_trace {
 
   Arg [1]    : string $mesg
                A message describing why a method is deprecated
-  Example    : use Bio::UniTrap::Utils::Exception qw(deprecate)
+  Example    : use Bio::TrapCluster::Utils::Exception qw(deprecate)
                sub old_sub {
                  deprecate('Please use new_sub() instead');
                }
@@ -421,7 +465,7 @@ my %DEPRECATED;
 
 sub deprecate {
   my $mesg = shift;
-  $mesg = shift if($mesg eq "Bio::UniTrap::Utils::Exception"); #skip object if one provided
+  $mesg = shift if($mesg eq "Bio::TrapCluster::Utils::Exception"); #skip object if one provided
 
   my $level = shift;
 
@@ -463,7 +507,7 @@ sub deprecate {
   Arg [1]    : anonymous subroutine
                the block to be tried
   Arg [2]    : return value of the catch function
-  Example    : use Bio::UniTrap::Utils::Exception qw(throw try catch)
+  Example    : use Bio::TrapCluster::Utils::Exception qw(throw try catch)
                The syntax is:
                try { block1 } catch { block2 };
                { block1 } is the 1st argument
