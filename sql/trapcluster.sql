@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `esclone` (
   KEY `design_type_idx` (`design_type`),
   KEY `clone_idx` (`clone`),
   KEY `clone_genbank_id_idx` (`clone_genbank_id`),
-  KEY `project_id` (`project_id`),
+  KEY `project_id` (`project_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1010170 ;
 
 -- --------------------------------------------------------
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `genbank_features` (
   UNIQUE KEY `tagname` (`tagname`,`esclone_id`),
   KEY `genbank_features_id_idx` (`genbank_features_id`),
   KEY `tagname_idx` (`tagname`),
-  KEY `esclone_id_idx` (`esclone_id`),
+  KEY `esclone_id_idx` (`esclone_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS `maxiclustermap` (
   `analysis_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`maxiclustermap_id`),
   UNIQUE KEY `trap_id_2` (`hit_id`,`hit_db`,`start`,`end`),
-  KEY `analysis_id` (`analysis_id`),
+  KEY `analysis_id` (`analysis_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
@@ -485,7 +485,7 @@ CREATE TABLE IF NOT EXISTS `trapadditional` (
   KEY `trap_id` (`trap_id`),
   KEY `processing` (`processing`),
   KEY `quality` (`quality`),
-  KEY `verified` (`verified`),
+  KEY `verified` (`verified`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=700175 ;
 
 -- --------------------------------------------------------
@@ -615,7 +615,7 @@ CREATE TABLE IF NOT EXISTS `trapclusteradditional` (
   KEY `trap_id` (`trapcluster_id`),
   KEY `processing` (`processing`),
   KEY `quality` (`quality`),
-  KEY `verified` (`verified`),
+  KEY `verified` (`verified`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 -- --------------------------------------------------------
