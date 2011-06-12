@@ -149,7 +149,7 @@ sub get_trap_by_id{
 
 sub get_trapcluster_by_id{
 	my ($self, $id) = @_;
-	my $query = qq{select t.* from trapcluster where  t.trapcluster_id = $id };
+	my $query = qq{select t.* from trapcluster t where  t.trapcluster_id = $id };
 	my $trapcluster = $self->select_from_table($query);
   	return $trapcluster;
 }
@@ -285,6 +285,17 @@ sub get_trapblock_by_trapmap_id{
 # 	$debug && print STDERR "$query\n";
 	my $trapblock = $self->select_many_from_table($query);
   	return $trapblock;
+}
+
+sub get_trapclusterblock_by_trapclustermap_id{
+	my ($self, $id) = @_;
+	
+	my $query = qq{select * from trapclusterblock   where   trapclustermap_id= $id};
+# 	$debug && print STDERR ref $self;
+# 	$debug && print STDERR "->get_trapblock_by_trapmap_id($id)\n";
+# 	$debug && print STDERR "$query\n";
+	my $trapclusterblock = $self->select_many_from_table($query);
+  	return $trapclusterblock;
 }
 
 sub get_trapblock_and_annotation_by_id{
@@ -595,6 +606,12 @@ sub get_trapmap_region_id_by_query{
 	my ($self, $query) = @_;
 	my $trapmap_region = $self->select_from_table($query);
 	return $trapmap_region->{'trapmap_region_id'}
+}
+
+sub get_trapclustermap_region_id_by_query{
+	my ($self, $query) = @_;
+	my $trapclustermap_region = $self->select_from_table($query);
+	return $trapclustermap_region->{'trapclustermap_region_id'}
 }
 
 sub get_insertion_id_by_query{

@@ -245,9 +245,9 @@ sub intron{
 	my $hash = $self->_prepare_region_hash($intron);
 	
 	my $prev_st_id = $intron->prev_Exon->stable_id;
-	unless (defined $prev_st_id){$prev_st_id = "Exon.".$exoncount;}
+	unless (defined $prev_st_id){$prev_st_id = "Exon.".$gene_id.".".$exoncount;}
 	my $next_st_id = $intron->next_Exon->stable_id;
-	unless (defined $next_st_id){$next_st_id = "Exon.".($exoncount+1);}
+	unless (defined $next_st_id){$next_st_id = "Exon.".$gene_id.".".($exoncount+1);}
 	$hash->{'seq_id'} = $prev_st_id."_".$next_st_id;
 	$hash->{'start'} = $start;
 	$hash->{'end'} = $end;

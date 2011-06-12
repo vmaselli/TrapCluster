@@ -39,8 +39,9 @@ use Getopt::Long;
 
 use Bio::Root::IO;
 
-use Bio::TrapCluster::ClusterTrap;
 use Bio::TrapCluster::Fetch;
+use Bio::TrapCluster::ClusterTrap;
+
 my %conf =  %::conf;
 my $swarm = $conf{'global'}{'swarm'};
 my $debug = $conf{'global'}{'debug'};
@@ -68,15 +69,17 @@ unless ($mol_type){
 	print "Choosed <$mol_type>\n";
 }
 
-my $sql = qq{select distinct tm.hit_id from trapmap tm, trap t where t.trap_id = tm.trap_id and tm.chosen = 1 and t.mol_type = 'mRNA' order by tm.hit_id limit 1};
+my $sql = qq{select distinct tm.hit_id from trapmap tm, trap t where t.trap_id = tm.trap_id and tm.chosen = 1 and t.mol_type = 'mRNA' and tm.hit_id = 'chr19' order by tm.hit_id };
 
 foreach my $res (@{$fetch->select_many_from_table($sql)}){
 
 	my $chr = $res->{'hit_id'};
+	print "<$chr>\n";
+	
 	my $region = "chromosome"; 
 	my $version = "NCBIM37";
 		
-	my $trapmap_fwd = qq{select tm.* from trapmap tm, trap t, trapblock tb where t.mol_type = '$mol_type' and tm.hit_id = '$chr' and tm.trap_id = t.trap_id and tm.trapmap_id = tb.trapmap_id and tm.chosen = '1' and tm.strand = "1" order by tm.start limit 10};
+	my $trapmap_fwd = qq{select tm.* from trapmap tm, trap t, trapblock tb where t.mol_type = '$mol_type' and tm.hit_id = '$chr' and tm.trap_id = t.trap_id and tm.trapmap_id = tb.trapmap_id and tm.chosen = '1' and tm.strand = "1" order by tm.start};
 	my $trapmap_rev = qq{select tm.start, tm.end from trapmap tm, trap t, trapblock tb where t.mol_type = '$mol_type' and tm.hit_id = '$chr' and tm.trap_id = t.trap_id and tm.trapmap_id = tb.trapmap_id and tm.chosen = '1' and tm.strand = "-1" order by tm.start};
 	print $trapmap_fwd,"\n";
 	
@@ -90,9 +93,3 @@ foreach my $res (@{$fetch->select_many_from_table($sql)}){
 	#my $cluster_rev = Bio::TrapCluster::ClusterTrap->new($rev);
 	#$cluster_rev->run($chr, $version,$region);
 }
-
-
-	
-
-
-

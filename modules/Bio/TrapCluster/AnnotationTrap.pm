@@ -142,7 +142,6 @@ sub new{
 	$do_mouse_cdna && $self->do_mouse_cdna($do_mouse_cdna);
 	$do_ensest && $self->do_ensest($do_ensest);
 	$do_ensrepeats && $self->do_ensrepeats($do_ensrepeats);
-	
   	return $self;
 }
 

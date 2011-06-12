@@ -108,16 +108,16 @@ BEGIN {
 		},
 		#Configuration for which annotations should be performed
 		'annotation' =>{
-						'do'=>1, #Perform annotation (if 0, only mapping)
-						'do_ensgene' => 1, #Check Ensembl gene annotation
+						'do'=>0, #Perform annotation (if 0, only mapping)
+						'do_ensgene' => 0, #Check Ensembl gene annotation
 						'do_ensestgene' => 1, #Check Ensembl EST gene annotation
 						'do_genescan' => 1, #Check GENSCAN annotation
-						'do_unigene' => 1, #Check Unigene
-						'do_mouse_cdna' => 1, #Check Mouse cDNAs
-						'do_ensest' => 1, #Check Ensembl ESTs
+						'do_unigene' => 0, #Check Unigene
+						'do_mouse_cdna' => 0, #Check Mouse cDNAs
+						'do_ensest' => 0, #Check Ensembl ESTs
 						'do_tclg' => 0, #Build Trap Cluster Genes ***NOT IMPLEMENTED YET***
-						'do_ensrepeats' => 1, #Check repeats
-						'unigene_coverage' => 0,
+						'do_ensrepeats' => 0, #Check repeats
+						'unigene_coverage' => 66,
 						'unigene_perc_id' => 96,
 						'cdna_coverage' => 66,
 						'cdna_perc_id' => 96,
