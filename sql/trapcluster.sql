@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `esclone` (
   KEY `clone_idx` (`clone`),
   KEY `clone_genbank_id_idx` (`clone_genbank_id`),
   KEY `project_id` (`project_id`),
-  FULLTEXT KEY `vector_name` (`vector_name`,`vector_type`)
+   KEY `vector_name` (`vector_name`,`vector_type`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1010170 ;
 
 -- --------------------------------------------------------
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `genbank_features` (
   KEY `genbank_features_id_idx` (`genbank_features_id`),
   KEY `tagname_idx` (`tagname`),
   KEY `esclone_id_idx` (`esclone_id`),
-  FULLTEXT KEY `Comment` (`Comment`)
+   KEY `Comment` (`Comment`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `maxiclustermap` (
   PRIMARY KEY (`maxiclustermap_id`),
   UNIQUE KEY `trap_id_2` (`hit_id`,`hit_db`,`start`,`end`),
   KEY `analysis_id` (`analysis_id`),
-  FULLTEXT KEY `accession` (`accession`)
+   KEY `accession` (`accession`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
@@ -489,10 +489,10 @@ CREATE TABLE IF NOT EXISTS `trapadditional` (
   KEY `processing` (`processing`),
   KEY `quality` (`quality`),
   KEY `verified` (`verified`),
-  FULLTEXT KEY `label` (`label`),
-  FULLTEXT KEY `comment` (`comment`),
-  FULLTEXT KEY `note` (`note`),
-  FULLTEXT KEY `user` (`user`)
+   KEY `label` (`label`),
+   KEY `comment` (`comment`),
+   KEY `note` (`note`),
+   KEY `user` (`user`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=700175 ;
 
 -- --------------------------------------------------------
@@ -623,10 +623,10 @@ CREATE TABLE IF NOT EXISTS `trapclusteradditional` (
   KEY `processing` (`processing`),
   KEY `quality` (`quality`),
   KEY `verified` (`verified`),
-  FULLTEXT KEY `label` (`label`),
-  FULLTEXT KEY `comment` (`comment`),
-  FULLTEXT KEY `note` (`note`),
-  FULLTEXT KEY `user` (`user`)
+   KEY `label` (`label`),
+   KEY `comment` (`comment`),
+   KEY `note` (`note`),
+   KEY `user` (`user`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 -- --------------------------------------------------------
