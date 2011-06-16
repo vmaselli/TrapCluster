@@ -76,7 +76,7 @@ if ($id == 22){$id = "M"};
 
 my $chr = "Chr".$id;
 
-my $sql = qq{select distinct tm.hit_id from trapmap tm, trap t where t.trap_id = tm.trap_id and tm.chosen = 1 and t.mol_type = 'mRNA' and tm.hit_id = $chr order by tm.hit_id };
+my $sql = qq{select distinct tm.hit_id from trapmap tm, trap t where t.trap_id = tm.trap_id and tm.chosen = 1 and t.mol_type = 'mRNA' and tm.hit_id = \"$chr\" order by tm.hit_id };
 
 foreach my $res (@{$fetch->select_many_from_table($sql)}){
 
