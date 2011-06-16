@@ -48,13 +48,14 @@ my $debug = $conf{'global'}{'debug'};
 
 my $fetch = Bio::TrapCluster::Fetch->new;
 
-my ($mol_type,$help);
+my ($mol_type,$id,$help);
 my $opt = &GetOptions( 
 	    "mol_type|m=s" =>    	\$mol_type,
+	    "id|c=s" => \$id,
 	    "help|h" => \$help
 	    );
 
-my $usage = "perl clustring_traps.pl -m mRNA";
+my $usage = "perl clustring_traps.pl -m mRNA -c 1\nChr X c= 20\tChr Y c = 21\t Mt c = 22";
 
 if ($help){
 
@@ -69,7 +70,13 @@ unless ($mol_type){
 	print "Choosed <$mol_type>\n";
 }
 
-my $sql = qq{select distinct tm.hit_id from trapmap tm, trap t where t.trap_id = tm.trap_id and tm.chosen = 1 and t.mol_type = 'mRNA' and tm.hit_id = 'chr19' order by tm.hit_id };
+if ($id == 20){$id = "X"};
+if ($id == 21){$id = "Y"};
+if ($id == 22){$id = "M"};
+
+my $chr = "Chr".$id;
+
+my $sql = qq{select distinct tm.hit_id from trapmap tm, trap t where t.trap_id = tm.trap_id and tm.chosen = 1 and t.mol_type = 'mRNA' and tm.hit_id = $chr order by tm.hit_id };
 
 foreach my $res (@{$fetch->select_many_from_table($sql)}){
 
@@ -84,12 +91,12 @@ foreach my $res (@{$fetch->select_many_from_table($sql)}){
 	print $trapmap_fwd,"\n";
 	
 	my $fwd = $fetch->select_many_from_table($trapmap_fwd);
-	#my $rev = $fetch->select_many_from_table($trapmap_rev);
+	my $rev = $fetch->select_many_from_table($trapmap_rev);
 	
 	print "RUN ClusterTrap on forward strand\n";
 	my $cluster_fwd = Bio::TrapCluster::ClusterTrap->new($fwd);
 	$cluster_fwd->run($chr, $version,$region);
 	
-	#my $cluster_rev = Bio::TrapCluster::ClusterTrap->new($rev);
-	#$cluster_rev->run($chr, $version,$region);
+	my $cluster_rev = Bio::TrapCluster::ClusterTrap->new($rev);
+	$cluster_rev->run($chr, $version,$region);
 }
