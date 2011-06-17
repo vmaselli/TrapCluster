@@ -225,6 +225,7 @@ sub run{
 	my ($self, $chr, $version, $region) = @_;
 	$chr =~ s/chr//;
 	my ($disc_ranges, $min_start, $max_end) = $self->disc_ranges;
+	sleep(60);
 	my $fetch = $self->load->fetch;
 	my $hit_db = $conf{'default'}{'hit_db'};
 	my $maxicluster_accession = $self->get_next_accession ('maxicluster','MCL');
@@ -233,6 +234,7 @@ sub run{
 	$maxicluster_toinsert{'mol_type'} = 'mRNA';
 	
 	my $maxicluster_id = $self->load->load_maxicluster(\%maxicluster_toinsert);
+	sleep(60);
 	foreach my $r (@{$disc_ranges}) {
 		$debug && print "Got here 237\n";
 		
@@ -246,7 +248,7 @@ sub run{
 		print "MAX ",$r->start," ",$r->end,"\n";
 		
 		my $maxiclustermap_id = $self->load->load_maxiclustermap(\%maxiclustermap_toinsert);
-		
+		sleep(60);
 		### Retrieve all the trapmaps overlapping the current maxicluster
 		my $sql_map = "select distinct tm.trap_id, tm.trapmap_id from trap t, trapmap tm where tm.start <= '".$r->end."' and tm.end >= '".$r->start."' order by tm.start,tm.end;";
 		

@@ -6,20 +6,20 @@ BEGIN {
 		# databases access parameters
 		# Details of the Ensembl Database as well as the Unitrap database to be created
 		'dbaccess' =>{
-						'enshost' => "ensembldb.ensembl.org",
-						'ensuser' => "anonymous",
+						'enshost' => "ens-livemirror",
+						'ensuser' => "ensro",
 						'enspass' => "",
-						'ensport'=>5306,
+						'ensport'=>3306,
 						'ensdbname' => "mus_musculus_core_61_37n",
 						'ensestdbname' => "mus_musculus_otherfeatures_61_37n", 
 						'ens_hs_dbname' => "homo_sapiens_core_61_37f", 
 						'martdbname' => "ensembl_mart_61",
-						'host' => "localhost",
-						'user' => "mysql-dev",
+						'host' => "mcs3a",
+						'user' => "unitrap",
 						#'dbname' => "UniTrapPipeline",
 						'dbname' => 'trapcluster',
-						'pass' => "dEvEl0pEr",
-						'port' => 3306
+						'pass' => "ut101013",
+						'port' => 3320
 					},
         # default variables 
 	    'default' =>{
@@ -108,8 +108,8 @@ BEGIN {
 		},
 		#Configuration for which annotations should be performed
 		'annotation' =>{
-						'do'=>0, #Perform annotation (if 0, only mapping)
-						'do_ensgene' => 0, #Check Ensembl gene annotation
+						'do'=>1, #Perform annotation (if 0, only mapping)
+						'do_ensgene' => 1, #Check Ensembl gene annotation
 						'do_ensestgene' => 1, #Check Ensembl EST gene annotation
 						'do_genescan' => 1, #Check GENSCAN annotation
 						'do_unigene' => 0, #Check Unigene

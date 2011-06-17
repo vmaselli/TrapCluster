@@ -89,14 +89,15 @@ foreach my $res (@{$fetch->select_many_from_table($sql)}){
 	my $trapmap_fwd = qq{select tm.* from trapmap tm, trap t, trapblock tb where t.mol_type = '$mol_type' and tm.hit_id = '$chr' and tm.trap_id = t.trap_id and tm.trapmap_id = tb.trapmap_id and tm.chosen = '1' and tm.strand = "1" order by tm.start};
 	my $trapmap_rev = qq{select tm.start, tm.end from trapmap tm, trap t, trapblock tb where t.mol_type = '$mol_type' and tm.hit_id = '$chr' and tm.trap_id = t.trap_id and tm.trapmap_id = tb.trapmap_id and tm.chosen = '1' and tm.strand = "-1" order by tm.start};
 	print $trapmap_fwd,"\n";
-	
+	sleep(60);	
 	my $fwd = $fetch->select_many_from_table($trapmap_fwd);
+	sleep(60);
 	my $rev = $fetch->select_many_from_table($trapmap_rev);
-	
+	sleep(60);
 	print "RUN ClusterTrap on forward strand\n";
 	my $cluster_fwd = Bio::TrapCluster::ClusterTrap->new($fwd);
 	$cluster_fwd->run($chr, $version,$region);
-	
+	sleep(120);
 	my $cluster_rev = Bio::TrapCluster::ClusterTrap->new($rev);
 	$cluster_rev->run($chr, $version,$region);
 }
