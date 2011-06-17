@@ -95,8 +95,8 @@ foreach my $res (@{$fetch->select_many_from_table($sql)}){
 	
 	print "RUN ClusterTrap on forward strand\n";
 	my $cluster_fwd = Bio::TrapCluster::ClusterTrap->new($fwd);
-	$cluster_fwd->run($chr, $version,$region);
+	$cluster_fwd->run($chr, $version,$region,1);
 	
 	my $cluster_rev = Bio::TrapCluster::ClusterTrap->new($rev);
-	$cluster_rev->run($chr, $version,$region);
+	$cluster_rev->run($chr, $version,$region,-1);
 }
