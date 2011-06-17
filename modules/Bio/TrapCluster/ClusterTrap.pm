@@ -185,7 +185,8 @@ sub get_next_accession () {
 		$accession = $prefix.$next_number;
 	}
 	
-	$debug && print STDOUT "LAST $table accession: $last - NEW $table accession: $accession\n";
+	$debug && print STDOUT "LAST $table accession: $last \n" if $last;
+	$debug && print STDOUT "NEW $table accession: $accession\n";
 	
 	return $accession;
 }
