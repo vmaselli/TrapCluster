@@ -118,7 +118,7 @@ sub annotation{
 
 
 sub disc_ranges () {
-	my ($self) = @_;
+	my ($self,$str) = @_;
 
 	my @ranges;
 	
@@ -145,7 +145,7 @@ sub disc_ranges () {
 		}
 		
 		if ($start && $end) {
-			my $range = new Bio::Range (-start=>$start, -end=>$end, -strand=>+1);
+			my $range = new Bio::Range (-start=>$start, -end=>$end, -strand=>$str);
 			push @ranges, $range;
 		} else {
 			print STDERR "\n########\nError. There isn't start or end, or both\n\n";
@@ -223,7 +223,7 @@ sub get_seq_from_id () {
 }
 
 sub run{
-	my ($self, $chr, $version, $region) = @_;
+	my ($self, $chr, $version, $region,$str) = @_;
 	$chr =~ s/chr//;
 	my ($disc_ranges, $min_start, $max_end) = $self->disc_ranges;
 	sleep(60);
@@ -242,10 +242,10 @@ sub run{
 		$maxiclustermap_toinsert{'maxicluster_id'} = $maxicluster_id;
 		$maxiclustermap_toinsert{'hit_id'} = $chr;
 		$maxiclustermap_toinsert{'hit_db'} = $version;
-		$maxiclustermap_toinsert{'strand'} = "1";
+		$maxiclustermap_toinsert{'strand'} = $str;
 		$maxiclustermap_toinsert{'start'} = $r->start;
 		$maxiclustermap_toinsert{'end'} = $r->end;
-		my $str = $maxiclustermap_toinsert{'strand'};
+		
 		print "MAX ",$r->start," ",$r->end,"\n";
 		
 		my $maxiclustermap_id = $self->load->load_maxiclustermap(\%maxiclustermap_toinsert);
@@ -294,7 +294,7 @@ sub run{
 			$toinsert_maxiclusterblocks{'maxiclustermap_id'} = $maxiclustermap_id;
 			$toinsert_maxiclusterblocks{'start'} = $r->start;
 			$toinsert_maxiclusterblocks{'end'} = $r->end;
-			$toinsert_maxiclusterblocks{'strand'} = $r->strand;					
+			$toinsert_maxiclusterblocks{'strand'} = $str;					
 			my $slice = $self->annotation->slicecoreadpt->fetch_by_region ($region,$chr,$r->start,$r->end,$str);
 			
 			$toinsert_maxiclusterblocks{'sequence'} = $slice->seq();
@@ -469,7 +469,7 @@ sub find_overlapping_traps{
 		$toinsert_trapclusterblocks{'trapclustermap_id'} = $trapclustermap_id;
 		$toinsert_trapclusterblocks{'start'} = $tclblocks->{'start'};
 		$toinsert_trapclusterblocks{'end'} = $tclblocks->{'end'};
-		$toinsert_trapclusterblocks{'strand'} = $tclblocks->{'strand'};
+		$toinsert_trapclusterblocks{'strand'} = $strand;
 		$toinsert_trapclusterblocks{'sequence'} = $tclblocks->{'sequence'};
 		
 		my $trapclusterblock_id = $self->load->load_trapclusterblock(\%toinsert_trapclusterblocks);
