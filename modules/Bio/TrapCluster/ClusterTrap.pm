@@ -599,7 +599,7 @@ sub annotate_with_ensembl_genescan {
 	my $trapblock = $self->load->fetch->get_trapclusterblock_by_trapclustermap_id($trapclustermap_id);
 	unless (scalar @{$trapblock}){
 		print STDERR "------ no blocks were accepted for this map\n";#shouldn't occurr!!!
-		die;
+		return 0;
 	}
 	
 	#WHICH IS CALLED GENE HERE IS ACTUALLY A PREDICT TRANSCRIPT
@@ -711,7 +711,7 @@ sub annotate_with_unigene {
 	
 	unless (scalar @{$trapblock}){
 		print STDERR "------ no blocks were accepted for this map\n";#shouldn't occurr!!!
-		die;
+		return 0;
 	}
 	
 	$hash->{'trapclustermap_region'}{'trapclustermap_id'} = $trapclustermap_id;
@@ -832,7 +832,7 @@ sub annotate_with_ensest {
 	
 	unless (scalar @{$trapblock}){
 		print STDERR "------ no blocks were accepted for this map\n";#shouldn't occurr!!!
-		die;
+		return 0;
 	}
 	
 	$hash->{'trapclustermap_region'}{'trapclustermap_id'} = $trapclustermap_id;
@@ -955,7 +955,7 @@ sub annotate_with_ensrepeats {
 
 	unless (scalar @{$trapblock}){
 		print STDERR "------ no blocks were accepted for this map\n";#shouldn't occurr!!!
-		die;
+		return 0;
 	}
 	
 	$hash->{'trapclustermap_region'}{'trapclustermap_id'} = $trapclustermap_id;
@@ -1072,7 +1072,7 @@ sub annotate_with_mouse_cdna {
 	
 	unless (scalar @{$trapblock}){
 		print STDERR "------ no blocks were accepted for this map\n";#shouldn't occurr!!!
-		die;
+		return 0;
 	}
 	
 	$hash->{'trapclustermap_region'}{'trapclustermap_id'} = $trapclustermap_id;
@@ -1203,7 +1203,7 @@ sub annotate_with_ensembl_gene{
 	my $trapblock = $self->load->fetch->get_trapclusterblock_by_trapclustermap_id($trapclustermap_id);
 	unless (scalar @{$trapblock}){
 		print STDERR "------ no blocks were accepted for this map\n";#shouldn't occurr!!!
-		die;
+		return 0;
 	}
 	$hash->{'trapclustermap_region'}{'trapclustermap_id'} = $trapclustermap_id;
 	
@@ -1472,7 +1472,7 @@ sub annotate_with_ensembl_estgene{
 	my $trapblock = $self->load->fetch->get_trapclusterblock_by_trapclustermap_id($trapclustermap_id);
 	unless (scalar @{$trapblock}){
 		print STDERR "------ no blocks were accepted for this map\n";#shouldn't occurr!!!
-		die;
+		return 0;
 	}
 	$hash->{'trapclustermap_region'}{'trapclustermap_id'} = $trapclustermap_id;
 	print STDERR "------ got here 706\n";
