@@ -234,7 +234,7 @@ sub run{
 	$maxicluster_toinsert{'mol_type'} = 'mRNA';
 	
 	my $maxicluster_id = $self->load->load_maxicluster(\%maxicluster_toinsert);
-	$debug && print "=== LOAD MAXICLUSTER $maxicluster_id\n";
+	$debug && print "=== LOAD MAXICLUSTER $maxicluster_accession - $maxicluster_id\n";
 	foreach my $r (@{$disc_ranges}) {
 		
 		$maxiclustermap_toinsert{'maxicluster_id'} = $maxicluster_id;
@@ -320,7 +320,9 @@ sub run{
 			
 			my $trap_maxicluster_id = $self->load->load_trap_maxicluster(\%toinsert_trap_maxicluster);
 		}
-		$debug && print STDOUT "\t== MAXICLUSTER DONE == CREATE TRAPCLUSTER STARTING\n";
+		$debug && print STDOUT "\t== MAXICLUSTER DONE == \n";
+		sleep (30);
+		$debug && print STDOUT "\t== CREATE TRAPCLUSTER STARTING\n";
 		my $feat_hash = $self->create_trapcluster($region,$maxicluster_id, $maxiclustermap_id, $hit_db, $chr, $str, $debug);
 		$debug && print "\n\n\t== TRAPCLUSTER CREATED START WITH ANNOTATION ==\n\n" if $conf{'annotation'}{'do'};
 		$self->annotate($region,$chr,$feat_hash) if $conf{'annotation'}{'do'};
