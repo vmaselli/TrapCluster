@@ -108,10 +108,10 @@ BEGIN {
 		},
 		#Configuration for which annotations should be performed
 		'annotation' =>{
-						'do'=>1, #Perform annotation (if 0, only mapping)
-						'do_ensgene' => 1, #Check Ensembl gene annotation
-						'do_ensestgene' => 1, #Check Ensembl EST gene annotation
-						'do_genescan' => 1, #Check GENSCAN annotation
+						'do'=>0, #Perform annotation (if 0, only mapping)
+						'do_ensgene' => 0, #Check Ensembl gene annotation
+						'do_ensestgene' => 0, #Check Ensembl EST gene annotation
+						'do_genescan' => 0, #Check GENSCAN annotation
 						'do_unigene' => 0, #Check Unigene
 						'do_mouse_cdna' => 0, #Check Mouse cDNAs
 						'do_ensest' => 0, #Check Ensembl ESTs
