@@ -226,7 +226,6 @@ sub run{
 	my ($self, $chr, $version, $region,$str) = @_;
 	$chr =~ s/chr//;
 	my ($disc_ranges, $min_start, $max_end) = $self->disc_ranges;
-	sleep(60);
 	my $fetch = $self->load->fetch;
 	my $hit_db = $conf{'default'}{'hit_db'};
 	my $maxicluster_accession = $self->get_next_accession ('maxicluster','MCL');
@@ -235,9 +234,8 @@ sub run{
 	$maxicluster_toinsert{'mol_type'} = 'mRNA';
 	
 	my $maxicluster_id = $self->load->load_maxicluster(\%maxicluster_toinsert);
-	sleep(60);
+	$debug && print "=== LOAD MAXICLUSTER $maxicluster_id\n";
 	foreach my $r (@{$disc_ranges}) {
-		$debug && print "Got here 237\n";
 		
 		$maxiclustermap_toinsert{'maxicluster_id'} = $maxicluster_id;
 		$maxiclustermap_toinsert{'hit_id'} = $chr;
@@ -246,10 +244,11 @@ sub run{
 		$maxiclustermap_toinsert{'start'} = $r->start;
 		$maxiclustermap_toinsert{'end'} = $r->end;
 		
-		print "MAX ",$r->start," ",$r->end,"\n";
+		
 		
 		my $maxiclustermap_id = $self->load->load_maxiclustermap(\%maxiclustermap_toinsert);
-		sleep(60);
+		$debug && print STDOUT "MAX maxiclusrermap range",$r->start," ",$r->end,"\n";
+		
 		### Retrieve all the trapmaps overlapping the current maxicluster
 		my $sql_map = "select distinct tm.trap_id, tm.trapmap_id from trap t, trapmap tm where tm.start <= '".$r->end."' and tm.end >= '".$r->start."' order by tm.start,tm.end;";
 		
@@ -321,9 +320,9 @@ sub run{
 			
 			my $trap_maxicluster_id = $self->load->load_trap_maxicluster(\%toinsert_trap_maxicluster);
 		}
-		$debug && print STDERR "\t== MAXICLUSTER DONE == CREATE TRAPCLUSTER STARTING\n";
+		$debug && print STDOUT "\t== MAXICLUSTER DONE == CREATE TRAPCLUSTER STARTING\n";
 		my $feat_hash = $self->create_trapcluster($region,$maxicluster_id, $maxiclustermap_id, $hit_db, $chr, $str, $debug);
-		$debug && print "\n\n\t== TRAPCLUSTER CREATED START WITH ANNOTATION ==\n\n";
+		$debug && print "\n\n\t== TRAPCLUSTER CREATED START WITH ANNOTATION ==\n\n" if $conf{'annotation'}{'do'};
 		$self->annotate($region,$chr,$feat_hash) if $conf{'annotation'}{'do'};
 		
 	}
@@ -334,7 +333,7 @@ sub create_trapcluster{
 	my %hash;
 	my $sql = "select maxiclusterblock_id from maxiclusterblock where maxiclustermap_id = '$maxiclustermap_id' order by start,end;";
 	
-	$debug && print STDERR "create_trapcluster line 334\n";
+	
 	
 	foreach my $blocks (@{$self->load->fetch->select_many_from_table($sql)}) {
 		my $maxiclusterblock_id = $blocks->{'maxiclusterblock_id'};
@@ -443,6 +442,8 @@ sub find_overlapping_traps{
 	$trapcluster_toinsert{'link_to_ucsc'} = "http://genome.ucsc.edu/cgi-bin/hgTracks?org=Mouse&position=chr$chr:$link_start-$link_end&db=".$conf{'default'}{'db_name'};
 	
 	my $trapcluster_id = $self->load->load_trapcluster(\%trapcluster_toinsert);
+	
+	$debug && print STDOUT "Create trapcluster $trapcluster_id\n";
 	my $trapclustermap_id;
 	
 	if ($trapcluster_id) {
