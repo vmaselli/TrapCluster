@@ -125,7 +125,9 @@ sub disc_ranges () {
 	my $min_start = '1000000000000000000';
 	my $max_end = '0';
 	
-	foreach my $coords (@{$self->trapmap_arrayref}) {
+	my @trapmap = @{$self->trapmap_arrayref};
+	$debug && print STDOUT "calling disc_ranges on $str. Found: ".scalar @trapmap."\n";
+	foreach my $coords (@trapmap) {
 		my $start = $coords->{'start'};
 		my $end = $coords->{'end'};
 		
