@@ -40,7 +40,7 @@ use Bio::Search::HSP::HSPFactory;
 
 my %conf =  %::conf;
 #my $debug = $conf{'global'}{'debug'};
-my $debug = 0;
+my $debug = 1;
 my $debugSQL =
 $conf{'global'}{'debugSQL'};
 my $mysql_path =$conf{'default'}{'mysql_path'};
@@ -653,8 +653,7 @@ sub load_trapcluster{
 	my $ucsc = $hash->{'link_to_ucsc'};
 	
 	my $query = qq{SELECT trapcluster_id FROM trapcluster WHERE  `accession` = \"$trapcluster_accession\"  };
-	
-	
+		
 	my $trapcluster = $self->fetch->select_from_table($query);
 	my $trapcluster_id = $trapcluster->{'trapcluster_id'} if $trapcluster;
 	unless($trapcluster_id){
