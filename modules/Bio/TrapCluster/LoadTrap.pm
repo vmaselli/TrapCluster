@@ -647,6 +647,7 @@ sub load_trapcluster{
 	my $query = qq{SELECT trapcluster_id FROM trapcluster WHERE  `accession` = \"$trapcluster_accession\"  };
 		
 	my $trapcluster = $self->fetch->select_from_table($query);
+	print Dumper $trapcluster;
 	my $trapcluster_id = $trapcluster->{'trapcluster_id'} if defined $trapcluster;
 	unless($trapcluster_id){
 		my $insert = qq{INSERT INTO trapcluster SET  `accession` = \"$trapcluster_accession\", maxicluster_id = $maxicluster_id, link_to_ensembl = \"$ens\", link_to_ucsc = \"$ucsc\"};
