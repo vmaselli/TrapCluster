@@ -492,13 +492,11 @@ sub load_maxicluster{
 	my $maxicluster_accession = $hash->{'accession'};
 	
 	my $query = qq{SELECT maxicluster_id FROM maxicluster WHERE  `accession` = \"$maxicluster_accession\"  };
-	$debug && print STDERR "$query\n";
 	my $maxicluster = $self->fetch->select_from_table($query);
 	
-	my $maxicluster_id = $maxicluster->{'maxicluster_id'} if $maxicluster;
+	my $maxicluster_id = $maxicluster->{'maxicluster_id'} if defined $maxicluster;
 	unless($maxicluster_id){
 		my $insert = qq{INSERT INTO maxicluster SET  `accession` = \"$maxicluster_accession\"};
-		$debug && print STDERR "$insert\n";
 		$maxicluster_id = $self->fetch->store($insert);
 	}
 	
@@ -516,14 +514,12 @@ sub load_maxiclustermap {
   	my $strand = $hash->{'strand'};
 	my $maxicluster_id = $hash->{'maxicluster_id'};
 	my $query = qq{SELECT maxiclustermap_id FROM maxiclustermap WHERE  `hit_id` = \"$hit_id\" AND `hit_db` = \"$hit_db\" AND `start` = $start AND `end` = $end  };
-	$debug && print STDERR "$query\n";
 	my $maxiclustermap = $self->fetch->select_from_table($query);
 	
-	my $maxiclustermap_id = $maxiclustermap->{'maxiclustermap_id'} if $maxiclustermap;
+	my $maxiclustermap_id = $maxiclustermap->{'maxiclustermap_id'} if defined $maxiclustermap;
 	
 	unless($maxiclustermap_id){
 		my $insert = qq{INSERT INTO maxiclustermap SET  `hit_id` = \"$hit_id\", `hit_db` = \"$hit_db\", `start` = $start, `end` = $end, `strand` = \"$strand\",  `maxicluster_id` = $maxicluster_id};
-		$debug && print STDERR "$insert\n";
 		$maxiclustermap_id = $self->fetch->store($insert);
 	}
 	
@@ -540,14 +536,12 @@ sub load_maxiclusterblock {
   	my $sequence = $hash->{'sequence'};
 	my $strand = $hash->{'strand'};
 	my $query = qq{SELECT maxiclusterblock_id FROM maxiclusterblock WHERE `start` = $start AND `end` = $end AND  maxiclustermap_id = $maxiclustermap_id};
-	$debug && print STDERR "$query\n";
 	my $maxiclusterblock = $self->fetch->select_from_table($query);
 	
-	my $maxiclusterblock_id = $maxiclusterblock->{'maxiclusterblock_id'};
+	my $maxiclusterblock_id = $maxiclusterblock->{'maxiclusterblock_id'} if defined $maxiclusterblock;
 	
 	unless($maxiclusterblock_id){
 		my $insert = qq{INSERT INTO maxiclusterblock SET  `start` = $start, `end` = $end, `strand` = \"$strand\", `maxiclustermap_id` = $maxiclustermap_id, `sequence` = \"$sequence\"};
-		$debug && print STDERR "$insert\n";
 		$maxiclusterblock_id = $self->fetch->store($insert);
 	}
 	
@@ -562,14 +556,12 @@ sub load_trap_maxicluster {
 	my $trapmap_id = $hash->{'trapmap_id'};
 	my $maxicluster_id = $hash->{'maxicluster_id'};
 	my $query = qq{SELECT trap_maxicluster_id FROM trap_maxicluster WHERE trap_id = $trap_id AND trapmap_id = $trapmap_id};
-	$debug && print STDERR "$query\n";
 	my $trap_maxicluster = $self->fetch->select_from_table($query);
 	
-	my $trap_maxicluster_id = $trap_maxicluster->{'trap_maxicluster_id'};
+	my $trap_maxicluster_id = $trap_maxicluster->{'trap_maxicluster_id'} if defined $trap_maxicluster;
 	
 	unless($trap_maxicluster_id){
 		my $insert = qq{INSERT INTO trap_maxicluster SET trap_id = $trap_id, maxicluster_id = $maxicluster_id, trapmap_id = $trapmap_id };
-		$debug && print STDERR "$insert\n";
 		$trap_maxicluster_id = $self->fetch->store($insert);
 	}
 
@@ -589,7 +581,7 @@ sub load_trapclustermap {
 	my $query = qq{SELECT trapclustermap_id FROM trapclustermap WHERE `trapcluster_id` = $trapcluster_id AND `hit_id` = \"$hit_id\" AND `hit_db` = \"$hit_db\" AND `start` = $start AND `end` = $end  AND  `strand` = \"$strand\"};
 	
 	my $trapclustermap = $self->fetch->select_from_table($query);
-	my $trapclustermap_id = $trapclustermap->{'trapclustermap_id'} if $trapclustermap;
+	my $trapclustermap_id = $trapclustermap->{'trapclustermap_id'} if defined $trapclustermap;
 	
 	unless($trapclustermap_id){
 		my $insert = qq{INSERT INTO trapclustermap SET  `trapcluster_id` = $trapcluster_id, `hit_id` = \"$hit_id\", `hit_db` = \"$hit_db\", `start` = $start, `end` = $end, `strand` = \"$strand\"};
@@ -611,7 +603,7 @@ sub load_trapclusterblock {
 	my $query = qq{SELECT trapclusterblock_id FROM trapclusterblock WHERE `start` = $start AND `end` = $end AND  trapclustermap_id = $trapclustermap_id};
 	
 	my $trapclusterblock = $self->fetch->select_from_table($query);
-	my $trapclusterblock_id = $trapclusterblock->{'trapclusterblock_id'} if $trapclusterblock;
+	my $trapclusterblock_id = $trapclusterblock->{'trapclusterblock_id'} if defined $trapclusterblock;
 	
 	unless($trapclusterblock_id){
 		my $insert = qq{INSERT INTO trapclusterblock SET  `start` = $start, `end` = $end, `strand` = \"$strand\", `trapclustermap_id` = $trapclustermap_id, `sequence` = \"$sequence\"};
@@ -631,7 +623,7 @@ sub load_trap_trapcluster {
 	my $query = qq{SELECT trap_trapcluster_id FROM trap_trapcluster WHERE trap_id = $trap_id AND trapmap_id = $trapmap_id};
 	
 	my $trap_trapcluster = $self->fetch->select_from_table($query);
-	my $trap_trapcluster_id = $trap_trapcluster->{'trap_trapcluster_id'} if $trap_trapcluster;
+	my $trap_trapcluster_id = $trap_trapcluster->{'trap_trapcluster_id'} if defined $trap_trapcluster;
 	
 	
 	unless($trap_trapcluster_id){
@@ -655,7 +647,7 @@ sub load_trapcluster{
 	my $query = qq{SELECT trapcluster_id FROM trapcluster WHERE  `accession` = \"$trapcluster_accession\"  };
 		
 	my $trapcluster = $self->fetch->select_from_table($query);
-	my $trapcluster_id = $trapcluster->{'trapcluster_id'} if $trapcluster;
+	my $trapcluster_id = $trapcluster->{'trapcluster_id'} if defined $trapcluster;
 	unless($trapcluster_id){
 		my $insert = qq{INSERT INTO trapcluster SET  `accession` = \"$trapcluster_accession\", maxicluster_id = $maxicluster_id, link_to_ensembl = \"$ens\", link_to_ucsc = \"$ucsc\"};
 		$trapcluster_id = $self->fetch->store($insert);
