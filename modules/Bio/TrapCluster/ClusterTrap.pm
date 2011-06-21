@@ -447,7 +447,7 @@ sub find_overlapping_traps{
 	
 	my $trapcluster_id = $self->load->load_trapcluster(\%trapcluster_toinsert);
 	
-	$debug && print STDOUT "Create trapcluster $trapcluster_id\n";
+	$debug && print STDOUT "Create trapcluster $trapcluster_accession - $trapcluster_id\n";
 	my $trapclustermap_id;
 	
 	if ($trapcluster_id) {

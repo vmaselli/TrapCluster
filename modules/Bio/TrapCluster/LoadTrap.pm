@@ -661,7 +661,7 @@ sub load_trapcluster{
 		my $insert = qq{INSERT INTO trapcluster SET  `accession` = \"$trapcluster_accession\", maxicluster_id = $maxicluster_id, link_to_ensembl = \"$ens\", link_to_ucsc = \"$ucsc\"};
 		$trapcluster_id = $self->fetch->store($insert);
 	}
-	
+	$debug && print STDOUT "$trapcluster_accession has ID $trapcluster_id\n";
 	return $trapcluster_id;
 	
 }
