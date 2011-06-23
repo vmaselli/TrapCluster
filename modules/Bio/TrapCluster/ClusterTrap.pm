@@ -322,14 +322,13 @@ sub run{
 			
 			my $trap_maxicluster_id = $self->load->load_trap_maxicluster(\%toinsert_trap_maxicluster);
 		}
-		$debug && print STDOUT "\t== MAXICLUSTER DONE == \n";
-		sleep (30);
+		$debug && print STDOUT "\t== MAXICLUSTERMAP DONE == \n";
 		$debug && print STDOUT "\t== CREATE TRAPCLUSTER STARTING\n";
 		my $feat_hash = $self->create_trapcluster($region,$maxicluster_id, $maxiclustermap_id, $hit_db, $chr, $str, $debug);
 		$debug && print "\n\n\t== TRAPCLUSTER CREATED START WITH ANNOTATION ==\n\n" if $conf{'annotation'}{'do'};
 		$self->annotate($region,$chr,$feat_hash) if $conf{'annotation'}{'do'};
-		
 	}
+	$debug && print STDOUT "\t== MAXICLUSTER DONE == \n";
 }
 
 sub create_trapcluster{                                                                                                                                                                                                         
@@ -337,7 +336,7 @@ sub create_trapcluster{
 	my %hash;
 	my $sql = "select maxiclusterblock_id from maxiclusterblock where maxiclustermap_id = '$maxiclustermap_id' order by start,end;";
 	
-	
+	$debug && print STDOUT "I'm in create_trapcluster\n";
 	
 	foreach my $blocks (@{$self->load->fetch->select_many_from_table($sql)}) {
 		my $maxiclusterblock_id = $blocks->{'maxiclusterblock_id'};
@@ -370,7 +369,7 @@ sub find_overlapping_traps{
 	my $min_start = 100000000000;
 	my $max_end = 0;
 	
-	$debug && print STDERR "find_overlapping_traps line 366\n";
+	$debug && print STDOUT "find_overlapping_traps line 366\n";
 	
 	foreach my $block_id (keys %blocks) {
 		if ($i == 0) {
