@@ -237,7 +237,7 @@ sub exec_import () {
 
 sub prepare_stmt {
     my ($self,$stmt) = @_;
-    $debug && print STDERR "$stmt\n";
+    #$debug && print STDERR "$stmt\n";
     my $dbh = $self->db_connection;
     my $success;
 	my $retry;
