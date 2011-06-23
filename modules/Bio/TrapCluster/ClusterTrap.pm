@@ -230,7 +230,7 @@ sub get_seq_from_id () {
 
 sub run{
 	my ($self, $chr, $version, $region,$str) = @_;
-	$chr =~ s/chr//;
+	$chr =~ s/chr//i;
 	my ($disc_ranges, $min_start, $max_end) = $self->disc_ranges;
 	my $fetch = $self->load->fetch;
 	my $hit_db = $conf{'default'}{'hit_db'};
