@@ -82,8 +82,8 @@ print "<$chr>\n";
 my $region = "chromosome"; 
 my $version = "NCBIM37";
 	
-my $trapmap_fwd = qq{select tm.* from trapmap tm, trap t, trapblock tb where t.mol_type = '$mol_type' and tm.hit_id = '$chr' and tm.trap_id = t.trap_id and tm.trapmap_id = tb.trapmap_id and tm.chosen = 1 and tm.strand = "1" order by tm.start};
-my $trapmap_rev = qq{select tm.start, tm.end from trapmap tm, trap t, trapblock tb where t.mol_type = '$mol_type' and tm.hit_id = '$chr' and tm.trap_id = t.trap_id and tm.trapmap_id = tb.trapmap_id and tm.chosen = 1 and tm.strand = "-1" order by tm.start};
+my $trapmap_fwd = qq{select tm.* from trapmap tm, trap t where t.mol_type = '$mol_type' and tm.hit_id = '$chr' and tm.trap_id = t.trap_id  and tm.chosen = 1 and tm.strand = "1" order by tm.start};
+my $trapmap_rev = qq{select tm.start, tm.end from trapmap tm, trap t where t.mol_type = '$mol_type' and tm.hit_id = '$chr' and tm.trap_id = t.trap_id and tm.chosen = 1 and tm.strand = "-1" order by tm.start};
 
 my $fwd = $fetch->select_many_from_table($trapmap_fwd);
 my $rev = $fetch->select_many_from_table($trapmap_rev);
