@@ -236,7 +236,7 @@ sub run{
 	$maxicluster_toinsert{'mol_type'} = 'mRNA';
 	
 	my $maxicluster_id = $self->load->load_maxicluster(\%maxicluster_toinsert);
-	$debug && print "=== LOAD MAXICLUSTER $maxicluster_accession - $maxicluster_id\n";
+	$debug && print "=== LOAD MAXICLUSTER $maxicluster_accession - $maxicluster_id - R ".scalar @{$disc_ranges}."\n";
 	foreach my $r (@{$disc_ranges}) {
 		
 		$maxiclustermap_toinsert{'maxicluster_id'} = $maxicluster_id;
@@ -249,7 +249,7 @@ sub run{
 		
 		
 		my $maxiclustermap_id = $self->load->load_maxiclustermap(\%maxiclustermap_toinsert);
-		$debug && print STDOUT "MAX maxiclusrermap range",$r->start," ",$r->end,"\n";
+		$debug && print STDOUT "MAX maxiclusrermap range ",$r->start," ",$r->end,"\n";
 		
 		### Retrieve all the trapmaps overlapping the current maxicluster
 		my $sql_map = "select distinct tm.trap_id, tm.trapmap_id from trap t, trapmap tm where tm.start <= '".$r->end."' and tm.end >= '".$r->start."' order by tm.start,tm.end;";
@@ -263,7 +263,7 @@ sub run{
 		foreach my $maps (@{$self->load->fetch->select_many_from_table($sql_map)}) {
 			my $trap_id = $maps->{'trap_id'};
 			my $trapmap_id = $maps->{'trapmap_id'};
-			#$debug && print STDERR "\t\tMAP $trap_id $trapmap_id\n";
+			$debug && print STDERR "\t\tMAP $trap_id $trapmap_id\n";
 			$trap_maxicluster_info{$trap_id}{'trapmap'} = $trapmap_id;
 			
 			### Retrieve all the trapblocks of the current trapmap
@@ -282,7 +282,7 @@ sub run{
 				}
 			}
 		}
-		$debug && print STDERR "\t\t\tline 284\n";
+		$debug && print STDERR "\t\t\trun line 284\n";
 		### Make a disconnected ranges of all the trapblocks present within the current maxicluster
 		### in order to create maxiclusterblocks
 		my @sorted_ranges = sort {$a->start <=> $b->start} @ranges;
@@ -336,24 +336,27 @@ sub create_trapcluster{
 	my %hash;
 	my $sql = "select maxiclusterblock_id from maxiclusterblock where maxiclustermap_id = '$maxiclustermap_id' order by start,end;";
 	
-	$debug && print STDOUT "I'm in create_trapcluster\n";
-	
+	$debug && print STDOUT "I'm in create_trapcluster running\n$sql\n";
+	$debug && print STDERR "create_trapcluster line 340 \n";
 	foreach my $blocks (@{$self->load->fetch->select_many_from_table($sql)}) {
 		my $maxiclusterblock_id = $blocks->{'maxiclusterblock_id'};
-		my $sql_block = "select start, end from maxiclusterblock where maxiclusterblock_id = '$maxiclusterblock_id' and checked = '0'";
-		#$debug && print STDERR "$sql_block\n";
+		my $sql_block = "select start, end from maxiclusterblock where maxiclusterblock_id = '$maxiclusterblock_id'";
+		$debug && print STDERR "$sql_block\n";
 		
 		my $block_info = $self->load->fetch->select_from_table($sql_block);
 		my $start = $block_info->{'start'};
 		my $end = $block_info->{'end'};
 		
-		if ($start && $end) {
+		if ($block_info->{'checked'} == 0) {
 			my %blocks;
 			$blocks{$maxiclusterblock_id}{'start'} = $start;
 			$blocks{$maxiclusterblock_id}{'end'} = $end;
 			
 			my ($features, $trapcluster_id) = $self->find_overlapping_traps($region,$maxicluster_id, $maxiclustermap_id, \%blocks, $hit_db, $chr, $strand, $debug);
 			$hash{$trapcluster_id} = $features;
+		}
+		else{
+			print STDERR "Checked = ".$block_info->{'checked'}"\n"
 		}
 	}
 	return \%hash;
