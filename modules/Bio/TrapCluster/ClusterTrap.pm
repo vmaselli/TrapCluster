@@ -126,7 +126,7 @@ sub disc_ranges () {
 	my $max_end = '0';
 	
 	my @trapmap = @{$self->trapmap_arrayref};
-	$debug && print STDOUT "calling disc_ranges on $str. Found: ".scalar @trapmap."\n";
+	$debug && print STDOUT "calling disc_ranges on $str. Found: ".scalar @trapmap." trapmap\n";
 	foreach my $coords (@trapmap) {
 		my $start = $coords->{'start'};
 		my $end = $coords->{'end'};
@@ -139,7 +139,7 @@ sub disc_ranges () {
 			$max_end = $end;
 		}
 		
-		#$debug && print STDOUT "Trying to range: START $start - END $end\n";
+		$debug && print STDOUT "Trying to range: START $start - END $end\n";
 		
 		if ($start > $end) {
 			print STDERR "ERROR $start - $end... iinverting the coords!!!\n";
@@ -154,9 +154,13 @@ sub disc_ranges () {
 		}
 	}
 	
-	$debug && print STDOUT "Disconnecting ranges\n";
+	$debug && print STDOUT "Found: ".scalar @ranges."\n";
+	
 	my @sorted_ranges = sort {$a->start <=> $b->start} @ranges;
+	$debug && print STDOUT "Disconnecting ranges\n";
 	my $disc_ranges = Bio::MCE::Range->disconnected_ranges($self->load->fetch->db_connection,\@sorted_ranges,1);
+	$debug && print STDOUT "Found: ".scalar @{$disc_ranges}."\n";
+	
 	if ($disc_ranges) {
 		return $disc_ranges, $min_start, $max_end;
 	} else {
@@ -245,14 +249,12 @@ sub run{
 		$maxiclustermap_toinsert{'strand'} = $str;
 		$maxiclustermap_toinsert{'start'} = $r->start;
 		$maxiclustermap_toinsert{'end'} = $r->end;
-		
-		
-		
+	
 		my $maxiclustermap_id = $self->load->load_maxiclustermap(\%maxiclustermap_toinsert);
-		$debug && print STDOUT "MAX maxiclusrermap range ",$r->start," ",$r->end,"\n";
+		$debug && print STDOUT "MAX maxiclustermap range ",$r->start," ",$r->end,"\n";
 		
 		### Retrieve all the trapmaps overlapping the current maxicluster
-		my $sql_map = "select distinct tm.trap_id, tm.trapmap_id from trap t, trapmap tm where tm.start <= '".$r->end."' and tm.end >= '".$r->start."' order by tm.start,tm.end;";
+		my $sql_map = "select distinct tm.trap_id, tm.trapmap_id from trap t, trapmap tm where tm.start <= '".$r->end."' and tm.end >= '".$r->start."' and chosen = 1 order by tm.start,tm.end;";
 		
 		my (@ranges,%trap_maxicluster_info);
 	
@@ -286,8 +288,9 @@ sub run{
 		### Make a disconnected ranges of all the trapblocks present within the current maxicluster
 		### in order to create maxiclusterblocks
 		my @sorted_ranges = sort {$a->start <=> $b->start} @ranges;
+		$debug && print STDOUT "found ".scalar @sorted_ranges." trapblock/ranges\n";
 	my @tb_disc_ranges = @{Bio::MCE::Range->disconnected_ranges($self->load->fetch->db_connection,\@sorted_ranges,1)};
-		
+		$debug && print STDOUT "found ".scalar @tb_disc_ranges." maxiblock/discon ranges\n";
 		### These are maxiclusterblocks
 		foreach my $r (@tb_disc_ranges) {
 			### Filling the table maxiclusterblock
