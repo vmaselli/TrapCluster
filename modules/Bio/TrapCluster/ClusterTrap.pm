@@ -359,7 +359,7 @@ sub create_trapcluster{
 			$hash{$trapcluster_id} = $features;
 		}
 		else{
-			print STDERR "Checked = ".$block_info->{'checked'}"\n"
+			print STDERR "Checked = ".$block_info->{'checked'}."\n";
 		}
 	}
 	return \%hash;
