@@ -493,8 +493,8 @@ sub load_maxicluster{
 	
 	my $query = qq{SELECT maxicluster_id FROM maxicluster WHERE  `accession` = \"$maxicluster_accession\"  };
 	my $maxicluster = $self->fetch->select_from_table($query);
-	
-	my $maxicluster_id = $maxicluster->{'maxicluster_id'} if defined $maxicluster;
+	my $maxicluster_id = 0;
+	$maxicluster_id = $maxicluster->{'maxicluster_id'} if defined $maxicluster;
 	unless($maxicluster_id){
 		my $insert = qq{INSERT INTO maxicluster SET  `accession` = \"$maxicluster_accession\"};
 		$maxicluster_id = $self->fetch->store($insert);
@@ -645,10 +645,10 @@ sub load_trapcluster{
 	my $ucsc = $hash->{'link_to_ucsc'};
 	
 	my $query = qq{SELECT trapcluster_id FROM trapcluster WHERE  `accession` = \"$trapcluster_accession\"  };
-		
+	my $trapcluster_id = 0;	
 	my $trapcluster = $self->fetch->select_from_table($query);
 	print Dumper $trapcluster;
-	my $trapcluster_id = $trapcluster->{'trapcluster_id'} if defined $trapcluster;
+	$trapcluster_id = $trapcluster->{'trapcluster_id'} if defined $trapcluster;
 	unless($trapcluster_id){
 		my $insert = qq{INSERT INTO trapcluster SET  `accession` = \"$trapcluster_accession\", maxicluster_id = $maxicluster_id, link_to_ensembl = \"$ens\", link_to_ucsc = \"$ucsc\"};
 		$trapcluster_id = $self->fetch->store($insert);
