@@ -298,7 +298,9 @@ sub run{
 			$toinsert_maxiclusterblocks{'maxiclustermap_id'} = $maxiclustermap_id;
 			$toinsert_maxiclusterblocks{'start'} = $r->start;
 			$toinsert_maxiclusterblocks{'end'} = $r->end;
-			$toinsert_maxiclusterblocks{'strand'} = $str;					
+			$toinsert_maxiclusterblocks{'strand'} = $str;
+			
+			$debug && print STDERR "SLICE on  REG $region, CHR $chr, S: ".$r->start.", E: ".$r->end.", STR $str\n";
 			my $slice = $self->annotation->slicecoreadpt->fetch_by_region ($region,$chr,$r->start,$r->end,$str);
 			
 			$toinsert_maxiclusterblocks{'sequence'} = $slice->seq();
