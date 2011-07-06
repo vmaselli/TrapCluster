@@ -94,7 +94,9 @@ sub new{
 	my $ensdbname = $conf{'dbaccess'}{'ensdbname'};
 	my $ensestdbname = $conf{'dbaccess'}{'ensestdbname'};
 	my $ensdbport = $conf{'dbaccess'}{'ensport'};
-	
+	$debug && print STDERR ref $self;
+	$debug && print STDERR "\n";
+	$debug && print STDERR Dumper $conf;
 	unless (defined $registry){
 		$registry = 'Bio::EnsEMBL::Registry';
 		$registry->load_registry_from_db(
